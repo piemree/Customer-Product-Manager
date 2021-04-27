@@ -7,8 +7,12 @@
         </b-navbar-item>
       </template>
       <template #start>
-        <b-navbar-item href="/"> Müşteriler </b-navbar-item>
-        <b-navbar-item href="/musteri-ekle"> Müşteri ekle </b-navbar-item>
+        <b-navbar-item tag="router-link" :to="{ path: '/' }"
+          >Müşteriler</b-navbar-item
+        >
+        <b-navbar-item tag="router-link" :to="{ path: '/musteri-ekle' }">
+          Müşteri Ekle
+        </b-navbar-item>
       </template>
 
       <template #end>
@@ -23,15 +27,20 @@
     </b-navbar>
 
     <div class="container">
-      <nuxt/>
+      <nuxt />
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
-  data() {
-    return {};
+  created() {
+    this.$store.dispatch("customer/getAllCustomersRealTime");
+    //this.$store.dispatch("customer/getAllCustomers");
+
+    console.log(process.env.FİREBASE_API_KEY);
   },
 };
 </script>
+

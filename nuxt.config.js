@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   target: "static",
@@ -38,8 +40,48 @@ export default {
     // https://go.nuxtjs.dev/buefy
     "nuxt-buefy",
     // https://go.nuxtjs.dev/axios
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+
+    [
+      "@nuxtjs/firebase",
+      {
+        config: {
+          apiKey: process.env.API_KEY,
+          authDomain: "customer-managment-2dd77.firebaseapp.com",
+          databaseURL:
+            "https://customer-managment-2dd77-default-rtdb.firebaseio.com",
+          projectId: "customer-managment-2dd77",
+          storageBucket: "customer-managment-2dd77.appspot.com",
+          messagingSenderId: "786831161886",
+          appId: "1:786831161886:web:aa057d5a126445cfb68c0f",
+          measurementId: "G-4CMR6FMVRE"
+        },
+        services: {
+          auth: true,
+          firestore: true,
+          functions: true,
+          storage: true,
+          database: true
+        }
+      }
+    ]
   ],
+
+  firestore: {
+    memoryOnly: false, // default
+    chunkName: process.env.NODE_ENV !== "production" ? "firebase-auth" : "[id]", // default
+    enablePersistence: true,
+    emulatorPort: 3000,
+    emulatorHost: "localhost",
+    settings: {
+      // Firestore Settings - currently only works in SPA mode
+    }
+  },
+
+  env: {
+    API_KEY:
+      process.env.FİREBASE_API_KEY || "AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -47,8 +89,5 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {} // blah blah
-  },
-  server: {
-    host: "0.0.0.0"
   }
 };

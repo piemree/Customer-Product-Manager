@@ -9,58 +9,41 @@
       paginated
       per-page="5"
       focusable
-      @click="show"
+      bordered
+      hoverable
+      
+      @click="payment"
     >
     </b-table>
   </section>
 </template>
 <script>
+
 export default {
+  
   methods: {
-    show(e) {
-      console.log(e);
+    payment(e) {
+      this.$router.push(`/${e.id}`)
     },
   },
+  
   computed: {
     customers() {
-      const regex = new RegExp(`^${this.name}`, "g");
-      return this.data.filter(
+     let all= this.$store.getters["customer/GET_CUSTOMERS"]
+      const regex = new RegExp(`^${this.name.toLowerCase()}`, "g");
+      return all.filter(
         ({ firma_adı, yetkili }) =>
           firma_adı.toLowerCase().match(regex) ||
           yetkili.toLowerCase().match(regex)
       );
     },
+    
   },
   data() {
     return {
+      showCustomerUpdate:false,
       name: "",
-      data: [
-        {
-          id: 1,
-          firma_adı: "Güneş Yıkama",
-          yetkili: "Barış çelik",
-          date: "2016-10-15 13:43:27",
-          son_tahsilat: "50",
-          bakiye: "450",
-        },
-        {
-          id: 2,
-          firma_adı: "Ay Yıkama",
-          yetkili: "Mahmut kel",
-          date: "2016-10-15 13:43:27",
-          son_tahsilat: "100",
-          bakiye: "800",
-        },
-        {
-          id: 3,
-          firma_adı: "Yıldız Yıkama",
-          yetkili: "Şaban çapa",
-          date: "2016-10-15 13:43:27",
-          son_tahsilat: "250",
-          bakiye: "1350",
-        },
-        
-      ],
+    
       columns: [
         {
           field: "firma_adı",
