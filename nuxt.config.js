@@ -1,4 +1,4 @@
-require("dotenv").config();
+import fireConfig from './firebaseConfig'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -33,6 +33,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     // '@nuxtjs/eslint-module'
+   '@nuxtjs/dotenv',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -45,17 +46,7 @@ export default {
     [
       "@nuxtjs/firebase",
       {
-        config: {
-          apiKey: process.env.API_KEY,
-          authDomain: "customer-managment-2dd77.firebaseapp.com",
-          databaseURL:
-            "https://customer-managment-2dd77-default-rtdb.firebaseio.com",
-          projectId: "customer-managment-2dd77",
-          storageBucket: "customer-managment-2dd77.appspot.com",
-          messagingSenderId: "786831161886",
-          appId: "1:786831161886:web:aa057d5a126445cfb68c0f",
-          measurementId: "G-4CMR6FMVRE"
-        },
+        config: fireConfig,
         services: {
           auth: true,
           firestore: true,
@@ -78,10 +69,9 @@ export default {
     }
   },
 
-  env: {
-    API_KEY:
-      process.env.FİREBASE_API_KEY || "AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
-  },
+ env:{
+   API_KEY:"AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
+ },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},

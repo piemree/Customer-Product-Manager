@@ -33,13 +33,12 @@
 </template>
 
 <script>
-
 export default {
   created() {
     this.$store.dispatch("customer/getAllCustomersRealTime");
     //this.$store.dispatch("customer/getAllCustomers");
 
-    console.log(process.env.FİREBASE_API_KEY);
+    
   },
 };
 </script>

@@ -1,13 +1,13 @@
-let firebaseConfig = {
-    apiKey: "AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk",
-    authDomain: "customer-managment-2dd77.firebaseapp.com",
-    databaseURL: "https://customer-managment-2dd77-default-rtdb.firebaseio.com",
-    projectId: "customer-managment-2dd77",
-    storageBucket: "customer-managment-2dd77.appspot.com",
-    messagingSenderId: "786831161886",
-    appId: "1:786831161886:web:aa057d5a126445cfb68c0f",
-    measurementId: "G-4CMR6FMVRE"
+
+export default {
+    apiKey: process.env.firebaseApiKey,
+    authDomain:process.env.firebaseAuthDomain ,
+    databaseURL:process.env.firebaseDbUrl ,
+    projectId:process.env.firebaseProjectId,
+    storageBucket:process.env.firebaseStorageBucket,
+    messagingSenderId:process.env.firebaseMessagingSenderId,
+    appId:process.env.firebaseAppId ,
+    measurementId:process.env.firebaseMeasurementId
   };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase.analytics();
+
+
