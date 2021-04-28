@@ -52,10 +52,16 @@ export const actions = {
             }
           }
           if (change.type === "modified") {
-            context.commit("UPDATE_CUSTOMER", {
-              ...change.doc.data(),
-              id: change.doc.id
-            });
+            const source = change.doc.metadata.hasPendingWrites
+              ? "Local"
+              : "Server";
+
+            if (source === "Server") {
+              context.commit("UPDATE_CUSTOMER", {
+                ...change.doc.data(),
+                id: change.doc.id
+              });
+            }
           }
           if (change.type === "removed") {
             console.log("Removed city: ", change.doc.data());
@@ -63,16 +69,6 @@ export const actions = {
         });
       });
   },
-  /*  async getSingleCustomer(context, id) {
-    let customer = await this.$fire.firestore
-      .collection("customers")
-      .doc(id)
-      .get();
-
-    context.commit("SET_CURRENT_CUSTOMER", customer.data());
-
-    return customer;
-  } */
 
   async addNewCustomer(context, customer) {
     let newCustomerRef = this.$fire.firestore.collection("customers");

@@ -1,4 +1,4 @@
-import fireConfig from './firebaseConfig'
+import fireConfig from "./firebaseConfig";
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -33,7 +33,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     // '@nuxtjs/eslint-module'
-   '@nuxtjs/dotenv',
+    "@nuxtjs/dotenv",
+    "@nuxtjs/pwa"
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -69,9 +70,9 @@ export default {
     }
   },
 
- env:{
-   API_KEY:"AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
- },
+  env: {
+    API_KEY: "AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -79,5 +80,8 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extend(config, ctx) {} // blah blah
+  },
+  pwa: {
+    icon: false // disables the icon module
   }
 };

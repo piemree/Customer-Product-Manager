@@ -22,19 +22,42 @@
       <b-input :value="customer.current_balance" disabled></b-input>
     </b-field>
 
-    <b-field label="Tahsilat Al">
-      <b-field grouped>
-        <b-numberinput :controls="false" v-model="decreaseCount" />
+    <b-field label="Ödeme Miktarı">
+      <b-field>
+        <b-input
+          placeholder="Güncel bakiye"
+          type="number"
+          min="0"
+          icon="calculator"
+          validation-message="Lütfen doğru formatta numara girin"
+          v-model="payment_amount"
+          style="max-width: 15rem"
+        >
+        </b-input>
+
         <p class="control">
-          <b-button @click="decreaseBacance" label="Tahsilat" />
+          <b-button label="Ödeme Al" />
         </p>
       </b-field>
     </b-field>
+
+    <b-field label="Güncel Bakiye">
+      <b-input
+        placeholder="Güncel bakiye"
+        type="number"
+        min="0"
+        icon="calculator"
+        validation-message="Lütfen doğru formatta numara girin"
+        v-model="payment_amount"
+        style="max-width: 15rem"
+      >
+      </b-input>
+    </b-field>
     <b-field label="Bakiye Ekle">
       <b-field grouped>
-        <b-numberinput :controls="false" v-model="addCount" />
+        <b-numberinput :controls="false" v-model="sales_amount" />
         <p class="control">
-          <b-button @click="addBalance" label="Ekle" />
+          <b-button label="Satış" />
         </p>
       </b-field>
     </b-field>
@@ -44,26 +67,11 @@
 export default {
   data() {
     return {
-      addCount: 0,
-      decreaseCount: 0,
+      payment_amount: 0,
+      sales_amount: 0,
     };
   },
-  methods: {
-    addBalance() {
-      this.$store.dispatch("customer/updateBacalance", {
-        id: this.customer.id,
-        balance: parseFloat(this.addCount).toFixed(2),
-        date: new Date().toLocaleString("tr"),
-      });
-    },
-    decreaseBacance() {
-      this.$store.dispatch("customer/updateBacalance", {
-        id: this.customer.id,
-        balance: parseFloat(this.decreaseCount).toFixed(2) * -1,
-        date: new Date().toLocaleString(),
-      });
-    },
-  },
+  methods: {},
   computed: {
     customer() {
       let all = this.$store.getters["customer/GET_CUSTOMERS"];
