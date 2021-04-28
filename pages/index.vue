@@ -32,9 +32,9 @@ export default {
      let all= this.$store.getters["customer/GET_CUSTOMERS"]
       const regex = new RegExp(`^${this.name.toLowerCase()}`, "g");
       return all.filter(
-        ({ firma_adı, yetkili }) =>
-          firma_adı.toLowerCase().match(regex) ||
-          yetkili.toLowerCase().match(regex)
+        ({ company_name, company_owner }) =>
+          company_name.toLowerCase().match(regex) ||
+          company_owner.toLowerCase().match(regex)
       );
     },
     
@@ -46,25 +46,33 @@ export default {
     
       columns: [
         {
-          field: "firma_adı",
-          label: "Firma",
+          field: "company_name",
+          label: "Şirket adı",
         },
         {
-          field: "yetkili",
-          label: "Yetkili",
+          field: "company_owner",
+          label: "Şirkeket sahibi",
         },
         {
-          field: "date",
+          field: "final_payment_date",
           label: "Son tahsilat tarihi",
-          centered: true,
+          
         },
         {
-          field: "son_tahsilat",
+          field: "final_payment_amount",
           label: "Son tahsilat miktarı",
         },
         {
-          field: "bakiye",
-          label: "Bakiye",
+          field: "final_sales_amount",
+          label: "Son satış miktarı",
+        },
+        {
+          field: "final_sales_date",
+          label: "Son satış tarihi",
+        },
+        {
+          field: "current_balance",
+          label: "Güncel bakiye",
         },
       ],
     };

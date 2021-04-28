@@ -1,25 +1,66 @@
 <template>
   <section class="section">
-    <h3 class="subtitle">Müşteri Ekle</h3>
-    <b-field>
+    <b-notification
+      type="is-success"
+      auto-close
+      :duration="2000"
+      :active="ntfOk"
+      aria-close-label="Close notification"
+    >
+      Şirket başarıyla eklendi.
+    </b-notification>
+    <b-notification
+      type="is-danger"
+      auto-close
+      :duration="2000"
+      :active="ntfErr"
+      aria-close-label="Close notification"
+    >
+      Hata! Şirket Eklenemedi.
+    </b-notification>
+    <h3 class="title">Müşteri Ekle</h3>
+
+    <b-field label="Şirket Adı">
       <b-input
-        placeholder="Firma Adı"
-        type="search"
-        icon="magnify"
-        icon-clickable
-        @icon-click="searchIconClick"
+        placeholder="Şirket adı"
+        v-model="newCustomer.company_name"
+        type="text"
+        icon="store"
+        style="max-width: 20rem"
       >
       </b-input>
     </b-field>
 
-    <b-field>
-      <b-input placeholder="Email" v-model="email" type="email" icon="email">
+    <b-field label="Şirket Sahibi">
+      <b-input
+        placeholder="Şirket sahibi"
+        v-model="newCustomer.company_owner"
+        type="text"
+        icon="account"
+        style="max-width: 20rem"
+      >
       </b-input>
     </b-field>
 
-    <b-field>
-      <b-input placeholder="Credit card" icon="credit-card"> </b-input>
+    <b-field label="Güncel Bakiye">
+      <b-input
+        placeholder="Güncel bakiye"
+        type="number"
+        min="0"
+        icon="calculator"
+        validation-message="Lütfen doğru formatta numara girin"
+        v-model="newCustomer.current_balance"
+        style="max-width: 15rem"
+      >
+      </b-input>
     </b-field>
+    <b-button
+      @click="addCustomer"
+      type="is-success"
+      :disabled="!balance || !coname || !coowner"
+      :loading="isOk"
+      >Ekle</b-button
+    >
   </section>
 </template>
 
@@ -27,16 +68,70 @@
 export default {
   data() {
     return {
-      email: "",
+      newCustomer: {
+        company_name: "",
+        company_owner: "",
+        final_payment_amount: 0,
+        final_payment_date: Date.now(),
+        final_sales_amount: 0,
+        final_sales_date: Date.now(),
+        current_balance: null,
+      },
+      balance: false,
+      coname: false,
+      coowner: false,
+      isOk: false,
+      ntfOk: false,
+      ntfErr: false,
     };
   },
-  methods: {
-    searchIconClick() {
-      alert("You wanna make a search?");
+
+  watch: {
+    "newCustomer.current_balance"() {
+      if (this.newCustomer.current_balance !== (null || "")) {
+        this.balance = true;
+      } else {
+        this.balance = false;
+      }
     },
-    clearIconClick() {
-      this.email = "";
-      alert("Email cleared!");
+    "newCustomer.company_name"() {
+      if (this.newCustomer.company_name !== "") {
+        this.coname = true;
+      } else {
+        this.coname = false;
+      }
+    },
+    "newCustomer.company_owner"() {
+      if (this.newCustomer.company_owner !== "") {
+        this.coowner = true;
+      } else {
+        this.coowner = false;
+      }
+    },
+  },
+  methods: {
+    addCustomer() {
+      this.isOk = true;
+      this.$store
+        .dispatch("customer/addNewCustomer", this.newCustomer)
+        .then((customer) => {
+          this.isOk = false;
+          this.ntfOk = true;
+          Object.assign(this.newCustomer, {
+            company_name: "",
+            company_owner: "",
+            final_payment_amount: 0,
+            final_payment_date: Date.now(),
+            final_sales_amount: 0,
+            final_sales_date: Date.now(),
+            current_balance: null,
+          });
+          setTimeout(() => (this.ntfOk = false), 2500);
+        })
+        .catch(() => {
+          this.ntfErr = true;
+          setTimeout(() => (this.ntfErr = false), 2500);
+        });
     },
   },
 };

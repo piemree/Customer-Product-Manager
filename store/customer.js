@@ -1,12 +1,5 @@
 export const state = () => ({
-  customers: [],
-  currentCustomer: {
-    bakiye: 0,
-    yetkili: "",
-    date: "",
-    firma_adı: "",
-    son_tahsilat: 0
-  }
+  customers: []
 });
 
 export const mutations = {
@@ -41,13 +34,6 @@ export const actions = {
     console.log(query);
   },
 
-  /*   async getAllCustomers(context) {
-    const snapshot = await this.$fire.firestore.collection("customers").get();
-
-    snapshot.docs.map(doc => {
-      context.commit("SET_CUSTOMERS", { ...doc.data(), id: doc.id });
-    });
-  }, */
   async getAllCustomersRealTime(context) {
     const observer = this.$fire.firestore
       .collection("customers")
@@ -77,7 +63,7 @@ export const actions = {
         });
       });
   },
-  async getSingleCustomer(context, id) {
+  /*  async getSingleCustomer(context, id) {
     let customer = await this.$fire.firestore
       .collection("customers")
       .doc(id)
@@ -86,5 +72,24 @@ export const actions = {
     context.commit("SET_CURRENT_CUSTOMER", customer.data());
 
     return customer;
+  } */
+
+  async addNewCustomer(context, customer) {
+    let newCustomerRef = this.$fire.firestore.collection("customers");
+
+    return new Promise((resolve, reject) => {
+      newCustomerRef
+        .add({
+          company_name: customer.company_name,
+          company_owner: customer.company_owner,
+          final_payment_amount: customer.final_payment_amount,
+          final_payment_date: customer.final_payment_date,
+          final_sales_amount: customer.final_sales_amount,
+          final_sales_date: customer.final_sales_date,
+          current_balance: customer.current_balance
+        })
+        .then(customerRef => resolve(customerRef))
+        .catch(err => reject(err));
+    });
   }
 };

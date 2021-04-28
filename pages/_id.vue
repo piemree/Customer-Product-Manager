@@ -1,19 +1,25 @@
 <template >
   <div class="section">
     <b-field label="Firma Adı">
-      <b-input :value="customer.firma_adı.toString()" disabled></b-input>
+      <b-input :value="customer.company_name" disabled></b-input>
     </b-field>
     <b-field label="Firma Sahibi">
-      <b-input :value="customer.yetkili.toString()" disabled></b-input>
+      <b-input :value="customer.company_owner" disabled></b-input>
     </b-field>
     <b-field label="Son Tahsilat Tarihi">
-      <b-input :value="customer.date.toString()" disabled></b-input>
+      <b-input :value="customer.final_payment_date" disabled></b-input>
     </b-field>
-    <b-field label="Son Tahsilat">
-      <b-input :value="customer.son_tahsilat.toString()" disabled></b-input>
+    <b-field label="Son Tahsilat Miktarı">
+      <b-input :value="customer.final_payment_amount" disabled></b-input>
     </b-field>
-    <b-field label="Son Bakiye">
-      <b-input :value="customer.bakiye.toString()" disabled></b-input>
+    <b-field label="Son Satış Tarihi">
+      <b-input :value="customer.final_sales_date" disabled></b-input>
+    </b-field>
+    <b-field label="Son Satış Miktarı">
+      <b-input :value="customer.final_sales_amount" disabled></b-input>
+    </b-field>
+    <b-field label="Güncel Bakiye">
+      <b-input :value="customer.current_balance" disabled></b-input>
     </b-field>
 
     <b-field label="Tahsilat Al">
