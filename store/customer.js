@@ -1,3 +1,4 @@
+import moment from "moment";
 export const state = () => ({
   customers: []
 });
@@ -35,39 +36,31 @@ export const actions = {
   },
 
   async getAllCustomersRealTime(context) {
-    const observer = this.$fire.firestore
-      .collection("customers")
-      .onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(change => {
-          if (change.type === "added") {
-            const source = change.doc.metadata.hasPendingWrites
-              ? "Local"
-              : "Server";
+    this.$fire.firestore.collection("customers").onSnapshot(querySnapshot => {
+      querySnapshot.docChanges().forEach(change => {
+        if (change.type === "added") {
+          const source = change.doc.metadata.hasPendingWrites
+            ? "Local"
+            : "Server";
 
-            if (source === "Server") {
-              context.commit("SET_CUSTOMERS", {
-                ...change.doc.data(),
-                id: change.doc.id
-              });
-            }
+          if (source === "Server") {
+            context.commit("SET_CUSTOMERS", {
+              ...change.doc.data(),
+              id: change.doc.id
+            });
           }
-          if (change.type === "modified") {
-            const source = change.doc.metadata.hasPendingWrites
-              ? "Local"
-              : "Server";
-
-            if (source === "Server") {
-              context.commit("UPDATE_CUSTOMER", {
-                ...change.doc.data(),
-                id: change.doc.id
-              });
-            }
-          }
-          if (change.type === "removed") {
-            console.log("Removed city: ", change.doc.data());
-          }
-        });
+        }
+        if (change.type === "modified") {
+          context.commit("UPDATE_CUSTOMER", {
+            ...change.doc.data(),
+            id: change.doc.id
+          });
+        }
+        if (change.type === "removed") {
+          console.log("Removed city: ", change.doc.data());
+        }
       });
+    });
   },
 
   async addNewCustomer(context, customer) {
@@ -82,10 +75,42 @@ export const actions = {
           final_payment_date: customer.final_payment_date,
           final_sales_amount: customer.final_sales_amount,
           final_sales_date: customer.final_sales_date,
-          current_balance: customer.current_balance
+          current_balance: customer.current_balance,
+          contact:customer.contact
         })
         .then(customerRef => resolve(customerRef))
         .catch(err => reject(err));
+    });
+  },
+  async getpaid(context, customer) {
+    let new_balance =
+      parseInt(customer.balance) - parseInt(customer.payment_amount);
+
+    let ref = this.$fire.firestore.collection("customers").doc(customer.id);
+
+    await ref.update({
+      current_balance: new_balance,
+      final_payment_amount: customer.payment_amount,
+      final_payment_date: moment()
+        .locale("tr")
+        .format("lll")
+    });
+  },
+
+  async sell(context, customer) {
+    
+    let new_balance =
+      parseInt(customer.balance) + parseInt(customer.sales_amount);
+
+     
+    let ref = this.$fire.firestore.collection("customers").doc(customer.id);
+
+    await ref.update({
+      current_balance: new_balance,
+      final_sales_amount: customer.sales_amount,
+      final_sales_date: moment()
+        .locale("tr")
+        .format("lll")
     });
   }
 };

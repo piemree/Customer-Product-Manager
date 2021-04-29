@@ -20,9 +20,9 @@
     </b-notification>
     <h3 class="title">Müşteri Ekle</h3>
 
-    <b-field label="Şirket Adı">
+    <b-field label="Firma Adı">
       <b-input
-        placeholder="Şirket adı"
+        placeholder="Firma adı"
         v-model="newCustomer.company_name"
         type="text"
         icon="store"
@@ -31,9 +31,9 @@
       </b-input>
     </b-field>
 
-    <b-field label="Şirket Sahibi">
+    <b-field label="Firma Sahibi">
       <b-input
-        placeholder="Şirket sahibi"
+        placeholder="Firma sahibi"
         v-model="newCustomer.company_owner"
         type="text"
         icon="account"
@@ -42,6 +42,16 @@
       </b-input>
     </b-field>
 
+    <b-field label="Firma İletişim">
+      <b-input
+        placeholder="Telefon"
+        v-model="newCustomer.contact"
+        type="text"
+        icon="phone"
+        style="max-width: 20rem"
+      >
+      </b-input>
+    </b-field>
     <b-field label="Güncel Bakiye">
       <b-input
         placeholder="Güncel bakiye"
@@ -72,10 +82,11 @@ export default {
         company_name: "",
         company_owner: "",
         final_payment_amount: 0,
-        final_payment_date: Date.now(),
+        final_payment_date: "henüz tahsilat yok",
         final_sales_amount: 0,
-        final_sales_date: Date.now(),
+        final_sales_date: "henüz satış yok",
         current_balance: null,
+        contact: "",
       },
       balance: false,
       coname: false,
@@ -125,6 +136,7 @@ export default {
             final_sales_amount: 0,
             final_sales_date: Date.now(),
             current_balance: null,
+            contact:""
           });
           setTimeout(() => (this.ntfOk = false), 2500);
         })

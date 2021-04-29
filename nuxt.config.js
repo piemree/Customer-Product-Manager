@@ -24,7 +24,9 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -83,12 +85,12 @@ export default {
   },
   pwa: {
     meta: {
-      title: 'My PWA',
-      author: 'Me',
+      title: 'musteri-yonetim',
+      author: 'Emre',
     },
     manifest: {
-      name: 'Nuxt.js PWAs are so easy',
-      short_name: 'Nuxt.js PWA',
+      name: 'DmGarag',
+      short_name: 'DM',
       lang: 'en',
     },
   }

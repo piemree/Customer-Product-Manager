@@ -18,6 +18,8 @@
     "dotenv": "^8.2.0",
     "find-config": "^1.0.0",
     "firebase": "^8.4.2",
+    "moment": "^2.29.1",
+    "moment-with-locales-es6": "^1.0.1",
     "nuxt": "^2.15.3",
     "nuxt-buefy": "^0.4.4"
   },

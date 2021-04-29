@@ -1,7 +1,7 @@
 <template>
   <section class="section">
-    <b-field label="Firma Adı">
-      <b-input v-model="name" style="width: 20rem"></b-input>
+    <b-field label="Firma Ara">
+      <b-input icon="store" v-model="name" style="width: 20rem"></b-input>
     </b-field>
     <b-table
       :data="customers"
@@ -47,11 +47,15 @@ export default {
       columns: [
         {
           field: "company_name",
-          label: "Şirket adı",
+          label: "Firma adı",
         },
         {
           field: "company_owner",
-          label: "Şirkeket sahibi",
+          label: "Firma sahibi",
+        },
+         {
+          field: "contact",
+          label: "Firma İletişim",
         },
         {
           field: "final_payment_date",

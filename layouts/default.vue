@@ -3,7 +3,7 @@
     <b-navbar>
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
-          <h1>DM</h1>
+          <h1>DMGARAGE</h1>
         </b-navbar-item>
       </template>
       <template #start>
