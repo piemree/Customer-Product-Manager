@@ -1,6 +1,7 @@
 import moment from "moment";
 export const state = () => ({
-  customers: []
+  customers: [],
+  products: []
 });
 
 export const mutations = {
@@ -9,7 +10,7 @@ export const mutations = {
   },
   UPDATE_CUSTOMER(state, data) {
     let index = state.customers.findIndex(customer => customer.id === data.id);
-    console.log(data);
+
     this._vm.$set(state.customers, index, data);
   },
   SET_CURRENT_CUSTOMER(state, customer) {
@@ -31,8 +32,6 @@ export const actions = {
     const query = await this.$fire.firestore
       .collection("customers")
       .where("id", "==", `${data.id}`);
-
-    console.log(query);
   },
 
   async getAllCustomersRealTime(context) {
@@ -57,7 +56,6 @@ export const actions = {
           });
         }
         if (change.type === "removed") {
-          console.log("Removed city: ", change.doc.data());
         }
       });
     });
@@ -76,7 +74,7 @@ export const actions = {
           final_sales_amount: customer.final_sales_amount,
           final_sales_date: customer.final_sales_date,
           current_balance: customer.current_balance,
-          contact:customer.contact
+          contact: customer.contact
         })
         .then(customerRef => resolve(customerRef))
         .catch(err => reject(err));
@@ -88,29 +86,31 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    await ref.update({
+    let result = await ref.update({
       current_balance: new_balance,
       final_payment_amount: customer.payment_amount,
       final_payment_date: moment()
         .locale("tr")
         .format("lll")
     });
+
+    return result;
   },
 
   async sell(context, customer) {
-    
     let new_balance =
       parseInt(customer.balance) + parseInt(customer.sales_amount);
 
-     
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    await ref.update({
+    let result = await ref.update({
       current_balance: new_balance,
       final_sales_amount: customer.sales_amount,
       final_sales_date: moment()
         .locale("tr")
         .format("lll")
     });
+
+    return result;
   }
 };

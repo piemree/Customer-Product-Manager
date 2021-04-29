@@ -13,6 +13,9 @@
         <b-navbar-item tag="router-link" :to="{ path: '/musteri-ekle' }">
           Müşteri Ekle
         </b-navbar-item>
+        <b-navbar-item tag="router-link" :to="{ path: '/urun-ekle' }">
+          Ürün Ekle
+        </b-navbar-item>
       </template>
 
       <template #end>
@@ -36,8 +39,6 @@
 export default {
   created() {
     this.$store.dispatch("customer/getAllCustomersRealTime");
-    //this.$store.dispatch("customer/getAllCustomers");
-
     
   },
 };

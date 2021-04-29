@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <b-field label="Firma Ara">
-      <b-input icon="store" v-model="name" style="width: 20rem"></b-input>
+      <b-input icon="magnify" v-model="name" style="width: 20rem"></b-input>
     </b-field>
     <b-table
       :data="customers"
@@ -11,6 +11,7 @@
       focusable
       bordered
       hoverable
+      :loading="customers.length<=0"
       
       @click="payment"
     >
