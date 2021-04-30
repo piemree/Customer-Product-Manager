@@ -69,11 +69,11 @@ export const actions = {
         .add({
           company_name: customer.company_name,
           company_owner: customer.company_owner,
-          final_payment_amount: customer.final_payment_amount,
+          final_payment_amount: parseInt(customer.final_payment_amount),
           final_payment_date: customer.final_payment_date,
-          final_sales_amount: customer.final_sales_amount,
+          final_sales_amount: parseInt(customer.final_sales_amount),
           final_sales_date: customer.final_sales_date,
-          current_balance: customer.current_balance,
+          current_balance:parseInt(customer.current_balance),
           contact: customer.contact
         })
         .then(customerRef => resolve(customerRef))
@@ -86,15 +86,22 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    let result = await ref.update({
-      current_balance: new_balance,
-      final_payment_amount: customer.payment_amount,
-      final_payment_date: moment()
-        .locale("tr")
-        .format("lll")
+    return new Promise((resolve, reject) => {
+      ref
+        .update({
+          current_balance: new_balance,
+          final_payment_amount: parseInt(customer.payment_amount),
+          final_payment_date: moment()
+            .locale("tr")
+            .format("lll")
+        })
+        .then(ok => {
+          resolve("ok")
+        })
+        .catch(err => {
+          reject("error")
+        });
     });
-
-    return result;
   },
 
   async sell(context, customer) {
@@ -103,14 +110,21 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    let result = await ref.update({
+    return new Promise((resolve, reject) => {
+    
+      ref.update({
       current_balance: new_balance,
       final_sales_amount: customer.sales_amount,
       final_sales_date: moment()
         .locale("tr")
         .format("lll")
+    }).then(ok => {
+      resolve("ok")
+    })
+    .catch(err => {
+      reject("error")
     });
-
-    return result;
+  })
+   
   }
 };

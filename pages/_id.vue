@@ -83,12 +83,10 @@
           v-model="productToAdd.price"
           :controls="false"
           validation-message="Lütfen doğru formatta numara girin"
-          style="max-width: 4rem"
+          style="max-width: 5.5rem"
         >
         </b-numberinput>
-        <p class="control">
-          <b-button @click="add" type="is-success" label="Ekle" />
-        </p>
+        <b-button @click="add" type="is-success" label="Ekle" />
       </b-field>
     </section>
 
@@ -143,6 +141,7 @@ export default {
       sales_amount: null,
       paybtn: false,
       salebtn: false,
+
       errormessage: "Lütfen doğru formatta numara girin",
       totalTablePrice: 0,
       products: [
@@ -210,7 +209,8 @@ export default {
     payment_amount() {
       if (
         this.payment_amount === (null || "") ||
-        parseInt(this.payment_amount) > parseInt(this.maxpayamount)
+        parseInt(this.payment_amount) > parseInt(this.maxpayamount) ||
+        this.payment_amount <= 0
       ) {
         this.paybtn = false;
       } else {
@@ -224,6 +224,7 @@ export default {
       }
     },
     sales_amount() {
+      console.log(typeof this.sales_amount);
       if (this.sales_amount !== (null || "")) {
         this.salebtn = true;
       } else {
@@ -256,17 +257,33 @@ export default {
         type: "is-success",
         onConfirm: async () => {
           const loadingComponent = this.$buefy.loading.open();
-          await this.$store.dispatch("customer/getpaid", {
-            id: this.customer.id,
-            payment_amount: this.payment_amount,
-            balance: this.customer.current_balance,
-          });
-          this.payment_amount = null;
-          loadingComponent.close();
-          this.$buefy.toast.open({
-            message: "İşlem Tamamlandı. Lütfen verileri kontrol edin.",
-            type: "is-warning",
-          });
+
+          try {
+            await this.$store.dispatch("customer/getpaid", {
+              id: this.customer.id,
+              payment_amount: this.payment_amount,
+              balance: this.customer.current_balance,
+            });
+            loadingComponent.close();
+            this.$buefy.toast.open({
+              message: "İşlem başarıyla tamamlandı",
+              type: "is-success",
+            });
+          } catch (error) {
+            loadingComponent.close();
+            this.$buefy.dialog.alert({
+              title: "HATA!!!",
+              message: "BİRŞEYLER TERS GİTTİ",
+              type: "is-danger",
+              hasIcon: false,
+              icon: "exclamation",
+              iconPack: "fa",
+              ariaRole: "alertdialog",
+              ariaModal: true,
+            });
+          }
+
+          this.payment_amount = "";
         },
       });
     },
@@ -281,18 +298,33 @@ export default {
         type: "is-success",
         onConfirm: async () => {
           const loadingComponent = this.$buefy.loading.open();
-          await this.$store.dispatch("customer/sell", {
-            id: this.customer.id,
-            sales_amount: this.sales_amount,
-            balance: this.customer.current_balance,
-          });
-          this.sales_amount = null;
+
+          try {
+            await this.$store.dispatch("customer/sell", {
+              id: this.customer.id,
+              sales_amount: this.sales_amount,
+              balance: this.customer.current_balance,
+            });
+            loadingComponent.close();
+            this.$buefy.toast.open({
+              message: "İşlem başarıyla tamamlandı",
+              type: "is-success",
+            });
+          } catch (error) {
+            loadingComponent.close();
+            this.$buefy.dialog.alert({
+              title: "HATA!!!",
+              message: "BİRŞEYLER TERS GİTTİ",
+              type: "is-danger",
+              hasIcon: false,
+              icon: "exclamation",
+              iconPack: "fa",
+              ariaRole: "alertdialog",
+              ariaModal: true,
+            });
+          }
+          this.sales_amount = "";
           this.data = [];
-          loadingComponent.close();
-          this.$buefy.toast.open({
-            message: "İşlem Tamamlandı. Lütfen verileri kontrol edin.",
-            type: "is-warning",
-          });
         },
       });
     },

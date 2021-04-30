@@ -1,23 +1,5 @@
 <template>
   <section class="section">
-    <b-notification
-      type="is-success"
-      auto-close
-      :duration="2000"
-      :active="ntfOk"
-      aria-close-label="Close notification"
-    >
-      Şirket başarıyla eklendi.
-    </b-notification>
-    <b-notification
-      type="is-danger"
-      auto-close
-      :duration="2000"
-      :active="ntfErr"
-      aria-close-label="Close notification"
-    >
-      Hata! Şirket Eklenemedi.
-    </b-notification>
     <h3 class="title">Müşteri Ekle</h3>
 
     <b-field label="Firma Adı">
@@ -68,7 +50,6 @@
       @click="addCustomer"
       type="is-success"
       :disabled="!balance || !coname || !coowner"
-      :loading="isOk"
       >Ekle</b-button
     >
   </section>
@@ -91,9 +72,6 @@ export default {
       balance: false,
       coname: false,
       coowner: false,
-      isOk: false,
-      ntfOk: false,
-      ntfErr: false,
     };
   },
 
@@ -121,13 +99,46 @@ export default {
     },
   },
   methods: {
-    addCustomer() {
-      this.isOk = true;
-      this.$store
-        .dispatch("customer/addNewCustomer", this.newCustomer)
-        .then((customer) => {
-          this.isOk = false;
-          this.ntfOk = true;
+    async addCustomer() {
+      this.$buefy.dialog.confirm({
+        title: "Onaylıyor musun?",
+        message: `<b>Firma: </b> ${this.newCustomer.company_name}
+                      <br/>
+                 <b>Firma Sahibi: </b> ${this.newCustomer.company_owner}
+                       <br/>
+                 <b>İletişim: </b> ${this.newCustomer.contact}
+                       <br/>
+                <b>Bakiye: </b> ${this.newCustomer.current_balance}
+                    `,
+        cancelText: "İptal",
+        confirmText: "Onaylıyorum",
+        type: "is-success",
+        onConfirm: async () => {
+          const loadingComponent = this.$buefy.loading.open();
+          try {
+            await this.$store.dispatch(
+              "customer/addNewCustomer",
+              this.newCustomer
+            );
+
+            loadingComponent.close();
+            this.$buefy.toast.open({
+              message: "Müşteri başarıyla eklendi",
+              type: "is-success",
+            });
+          } catch (error) {
+            loadingComponent.close();
+              this.$buefy.dialog.alert({
+                    title: 'HATA!!!',
+                    message: 'BİRŞEYLER TERS GİTTİ',
+                    type: 'is-danger',
+                    hasIcon: false,
+                    icon: 'exclamation',
+                    iconPack: 'fa',
+                    ariaRole: 'alertdialog',
+                    ariaModal: true
+                })
+          }
           Object.assign(this.newCustomer, {
             company_name: "",
             company_owner: "",
@@ -136,14 +147,10 @@ export default {
             final_sales_amount: 0,
             final_sales_date: Date.now(),
             current_balance: null,
-            contact:""
+            contact: "",
           });
-          setTimeout(() => (this.ntfOk = false), 2500);
-        })
-        .catch(() => {
-          this.ntfErr = true;
-          setTimeout(() => (this.ntfErr = false), 2500);
-        });
+        },
+      });
     },
   },
 };
