@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {
@@ -128,24 +129,24 @@ export default {
             });
           } catch (error) {
             loadingComponent.close();
-              this.$buefy.dialog.alert({
-                    title: 'HATA!!!',
-                    message: 'BİRŞEYLER TERS GİTTİ',
-                    type: 'is-danger',
-                    hasIcon: false,
-                    icon: 'exclamation',
-                    iconPack: 'fa',
-                    ariaRole: 'alertdialog',
-                    ariaModal: true
-                })
+            this.$buefy.dialog.alert({
+              title: "HATA!!!",
+              message: "BİRŞEYLER TERS GİTTİ",
+              type: "is-danger",
+              hasIcon: false,
+              icon: "exclamation",
+              iconPack: "fa",
+              ariaRole: "alertdialog",
+              ariaModal: true,
+            });
           }
           Object.assign(this.newCustomer, {
             company_name: "",
             company_owner: "",
             final_payment_amount: 0,
-            final_payment_date: Date.now(),
+            final_payment_date: moment().locale("tr").format("lll"),
             final_sales_amount: 0,
-            final_sales_date: Date.now(),
+            final_sales_date: moment().locale("tr").format("lll"),
             current_balance: null,
             contact: "",
           });

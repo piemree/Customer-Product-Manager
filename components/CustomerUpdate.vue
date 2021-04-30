@@ -1,7 +1,7 @@
 <template >
-    <div class="">
+    <section >
         
-    </div>
+    </section>
 </template>
 <script>
 export default {

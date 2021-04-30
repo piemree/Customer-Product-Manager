@@ -25,7 +25,7 @@
       <b-input :value="customer.current_balance" disabled></b-input>
     </b-field>
 
-    <b-field label="Ödeme Miktarı">
+    <!--  <b-field label="Ödeme Miktarı">
       <div style="display: flex">
         <b-input
           placeholder="Ödeme miktarı"
@@ -130,204 +130,27 @@
           />
         </p>
       </div>
-    </b-field>
+    </b-field> -->
+    <Payment :customer="customer" />
   </div>
 </template>
 <script>
+import Payment from "@/components/Payment";
 export default {
-  data() {
-    return {
-      payment_amount: null,
-      sales_amount: null,
-      paybtn: false,
-      salebtn: false,
-
-      errormessage: "Lütfen doğru formatta numara girin",
-      totalTablePrice: 0,
-      products: [
-        { name: "köpük" },
-        { name: "silikon" },
-        { name: "lastik" },
-        { name: "fırça" },
-        { name: "parfüm" },
-      ],
-      productToAdd: {
-        product: "",
-        count: null,
-        price: null,
-        total: null,
-      },
-      data: [],
-      checkedRows: [],
-      columns: [
-        {
-          field: "product",
-          label: "Ürün",
-        },
-        {
-          field: "count",
-          label: "Adet",
-        },
-        {
-          field: "price",
-          label: "Fiyat",
-        },
-        {
-          field: "total",
-          label: "Ara toplam",
-        },
-      ],
-    };
+  component: {
+    Payment,
   },
+
   computed: {
-    totPrice() {
-      return this.totalTablePrice;
-    },
     customer() {
       let all = this.$store.getters["customer/GET_CUSTOMERS"];
       return all.filter(({ id }) => id.toString() === this.$route.params.id)[0];
-    },
-    maxpayamount() {
-      return this.customer.current_balance;
     },
   },
   created() {
     this.$store.getters["customer/GET_CUSTOMERS"].length === 0
       ? this.$router.push("/")
       : false;
-  },
-  watch: {
-    data() {
-      let total = 0;
-      this.data.map((el) => (total += parseInt(el.total)));
-      this.totalTablePrice = total;
-
-      this.totalTablePrice === 0
-        ? (this.sales_amount = null)
-        : (this.sales_amount = this.totalTablePrice);
-    },
-    payment_amount() {
-      if (
-        this.payment_amount === (null || "") ||
-        parseInt(this.payment_amount) > parseInt(this.maxpayamount) ||
-        this.payment_amount <= 0
-      ) {
-        this.paybtn = false;
-      } else {
-        this.paybtn = true;
-      }
-
-      if (parseInt(this.payment_amount) > parseInt(this.maxpayamount)) {
-        this.errormessage = "Ödeme miktarı bakiyeden büyük olmaz";
-      } else {
-        this.errormessage = "Lütfen doğru formatta numara girin ";
-      }
-    },
-    sales_amount() {
-      console.log(typeof this.sales_amount);
-      if (this.sales_amount !== (null || "")) {
-        this.salebtn = true;
-      } else {
-        this.salebtn = false;
-      }
-    },
-  },
-  methods: {
-    add() {
-      this.productToAdd.total =
-        parseInt(this.productToAdd.count) * parseInt(this.productToAdd.price);
-
-      this.data.push(this.productToAdd);
-
-      this.productToAdd = {
-        product: "",
-        count: null,
-        price: null,
-        total: null,
-      };
-    },
-    getpaid() {
-      this.$buefy.dialog.confirm({
-        title: "Uyarı Mesajı",
-        message: `
-                    ${this.payment_amount} TL Tutarındaki tahsilatı onaylıyor musun?
-                    `,
-        cancelText: "İptal",
-        confirmText: "Onaylıyorum",
-        type: "is-success",
-        onConfirm: async () => {
-          const loadingComponent = this.$buefy.loading.open();
-
-          try {
-            await this.$store.dispatch("customer/getpaid", {
-              id: this.customer.id,
-              payment_amount: this.payment_amount,
-              balance: this.customer.current_balance,
-            });
-            loadingComponent.close();
-            this.$buefy.toast.open({
-              message: "İşlem başarıyla tamamlandı",
-              type: "is-success",
-            });
-          } catch (error) {
-            loadingComponent.close();
-            this.$buefy.dialog.alert({
-              title: "HATA!!!",
-              message: "BİRŞEYLER TERS GİTTİ",
-              type: "is-danger",
-              hasIcon: false,
-              icon: "exclamation",
-              iconPack: "fa",
-              ariaRole: "alertdialog",
-              ariaModal: true,
-            });
-          }
-
-          this.payment_amount = "";
-        },
-      });
-    },
-    sell() {
-      this.$buefy.dialog.confirm({
-        title: "Uyarı Mesajı",
-        message: `
-                    ${this.sales_amount} TL Tutarındaki satışı onaylıyor musun?
-                    `,
-        cancelText: "İptal",
-        confirmText: "Onaylıyorum",
-        type: "is-success",
-        onConfirm: async () => {
-          const loadingComponent = this.$buefy.loading.open();
-
-          try {
-            await this.$store.dispatch("customer/sell", {
-              id: this.customer.id,
-              sales_amount: this.sales_amount,
-              balance: this.customer.current_balance,
-            });
-            loadingComponent.close();
-            this.$buefy.toast.open({
-              message: "İşlem başarıyla tamamlandı",
-              type: "is-success",
-            });
-          } catch (error) {
-            loadingComponent.close();
-            this.$buefy.dialog.alert({
-              title: "HATA!!!",
-              message: "BİRŞEYLER TERS GİTTİ",
-              type: "is-danger",
-              hasIcon: false,
-              icon: "exclamation",
-              iconPack: "fa",
-              ariaRole: "alertdialog",
-              ariaModal: true,
-            });
-          }
-          this.sales_amount = "";
-          this.data = [];
-        },
-      });
-    },
   },
 };
 </script>
