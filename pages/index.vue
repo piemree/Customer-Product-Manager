@@ -61,6 +61,7 @@
 <script>
 export default {
   methods: {
+    //test hub
     payment(id) {
       this.$router.push(`/${id}`);
     },
