@@ -4,24 +4,65 @@
       <b-input icon="magnify" v-model="name" style="width: 20rem"></b-input>
     </b-field>
     <b-table
-      style="cursor: pointer; border:none"
       :data="customers"
       :columns="columns"
       paginated
       per-page="5"
-      focusable
+      
       :bordered="false"
-      hoverable
-      @click="payment"
+      
     >
+      <b-table-column field="company_name" label="Firma adı" v-slot="props">
+        {{ props.row.company_name }}
+      </b-table-column>
+      <b-table-column field="company_owner" label="Firma sahibi" v-slot="props">
+        {{ props.row.company_owner }}
+      </b-table-column>
+      <b-table-column field="contact" label="İletişim" v-slot="props">
+        {{ props.row.contact }}
+      </b-table-column>
+      <b-table-column
+        field="final_payment_date"
+        label="Son tahsilat tarihi"
+        v-slot="props"
+      >
+        {{ props.row.final_payment_date }}
+      </b-table-column>
+      <b-table-column
+        field="final_payment_amount"
+        label="Son tahsilat miktarı"
+        v-slot="props"
+      >
+        {{ props.row.final_payment_amount }}
+      </b-table-column>
+      <b-table-column
+        field="final_sales_amount"
+        label="Son satış miktarı"
+        v-slot="props"
+      >
+        {{ props.row.final_sales_amount }}
+      </b-table-column>
+      <b-table-column
+        field="final_sales_date"
+        label="Son satış tarihi"
+        v-slot="props"
+      >
+        {{ props.row.final_sales_date }}
+      </b-table-column>
+      <b-table-column field="current_balance" label="Bakiye" v-slot="props">
+        {{ props.row.current_balance }}
+      </b-table-column>
+      <b-table-column v-slot="props">
+        <b-button style="width:100%" @click="payment(props.row.id)">İncele</b-button>
+      </b-table-column>
     </b-table>
   </section>
 </template>
 <script>
 export default {
   methods: {
-    payment(e) {
-      this.$router.push(`/${e.id}`);
+    payment(id) {
+      this.$router.push(`/${id}`);
     },
   },
 
@@ -38,10 +79,9 @@ export default {
   },
   data() {
     return {
-      
       name: "",
-      
-      columns: [
+
+      /* columns: [
         {
           field: "company_name",
           label: "Firma adı",
@@ -74,7 +114,7 @@ export default {
           field: "current_balance",
           label: "Güncel bakiye",
         },
-      ],
+      ], */
     };
   },
 };

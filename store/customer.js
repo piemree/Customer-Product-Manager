@@ -42,12 +42,12 @@ export const actions = {
             ? "Local"
             : "Server";
 
-          if (source === "Server") {
+         
             context.commit("SET_CUSTOMERS", {
               ...change.doc.data(),
               id: change.doc.id
             });
-          }
+          
         }
         if (change.type === "modified") {
           context.commit("UPDATE_CUSTOMER", {
@@ -59,6 +59,7 @@ export const actions = {
         }
       });
     });
+
   },
 
   async addNewCustomer(context, customer) {
@@ -69,12 +70,13 @@ export const actions = {
         .add({
           company_name: customer.company_name,
           company_owner: customer.company_owner,
-          final_payment_amount: parseInt(customer.final_payment_amount),
-          final_payment_date: customer.final_payment_date,
-          final_sales_amount: parseInt(customer.final_sales_amount),
-          final_sales_date: customer.final_sales_date,
+          final_payment_amount:0,
+          final_payment_date: "-",
+          final_sales_amount: 0,
+          final_sales_date: "-",
           current_balance:parseInt(customer.current_balance),
-          contact: customer.contact
+          contact: customer.contact,
+          final_shopping_info:[]
         })
         .then(customerRef => resolve(customerRef))
         .catch(err => reject(err));
@@ -115,6 +117,7 @@ export const actions = {
       ref.update({
       current_balance: new_balance,
       final_sales_amount: customer.sales_amount,
+      final_shopping_info:customer.final_shopping,
       final_sales_date: moment()
         .locale("tr")
         .format("lll")

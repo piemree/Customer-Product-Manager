@@ -70,6 +70,8 @@ export default {
       this.$store.dispatch("product/removeProduct", id);
     },
   },
+
+ 
 };
 </script>
 <style  scoped >

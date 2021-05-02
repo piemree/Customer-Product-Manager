@@ -56,17 +56,12 @@
 </template>
 
 <script>
-import moment from "moment";
 export default {
   data() {
     return {
       newCustomer: {
         company_name: "",
         company_owner: "",
-        final_payment_amount: 0,
-        final_payment_date: "henüz tahsilat yok",
-        final_sales_amount: 0,
-        final_sales_date: "henüz satış yok",
         current_balance: null,
         contact: "",
       },
@@ -143,10 +138,6 @@ export default {
           Object.assign(this.newCustomer, {
             company_name: "",
             company_owner: "",
-            final_payment_amount: 0,
-            final_payment_date: moment().locale("tr").format("lll"),
-            final_sales_amount: 0,
-            final_sales_date: moment().locale("tr").format("lll"),
             current_balance: null,
             contact: "",
           });

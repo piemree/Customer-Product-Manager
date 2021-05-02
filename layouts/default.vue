@@ -40,6 +40,8 @@ export default {
   created() {
     this.$store.dispatch("customer/getAllCustomersRealTime");
     this.$store.dispatch("product/getAllProductsRealTime");
+
+    
   },
 };
 </script>

@@ -90,7 +90,7 @@ export default {
       author: 'Emre',
     },
     manifest: {
-      name: 'DmGarag',
+      name: 'Müsteri Takip',
       short_name: 'DM',
       lang: 'en',
     },

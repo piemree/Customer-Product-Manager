@@ -18,10 +18,13 @@
     "dotenv": "^8.2.0",
     "find-config": "^1.0.0",
     "firebase": "^8.4.2",
+    "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14",
     "moment": "^2.29.1",
     "moment-with-locales-es6": "^1.0.1",
     "nuxt": "^2.15.3",
-    "nuxt-buefy": "^0.4.4"
+    "nuxt-buefy": "^0.4.4",
+    "pdfmake": "^0.1.71"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",
