@@ -119,13 +119,6 @@ export default {
 
       errormessage: "Lütfen doğru formatta numara girin",
       totalTablePrice: 0,
-      products: [
-        { name: "köpük" },
-        { name: "silikon" },
-        { name: "lastik" },
-        { name: "fırça" },
-        { name: "parfüm" },
-      ],
       productToAdd: {
         product: "",
         count: null,
@@ -166,6 +159,9 @@ export default {
     },
     maxpayamount() {
       return this.customer.current_balance;
+    },
+    products() {
+      return this.$store.getters["product/GET_PRODUCTS"];
     },
   },
   watch: {

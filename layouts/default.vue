@@ -4,7 +4,6 @@
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
           <h1>DMGARAGE</h1>
-          
         </b-navbar-item>
       </template>
       <template #start>
@@ -40,7 +39,7 @@
 export default {
   created() {
     this.$store.dispatch("customer/getAllCustomersRealTime");
-    
+    this.$store.dispatch("product/getAllProductsRealTime");
   },
 };
 </script>

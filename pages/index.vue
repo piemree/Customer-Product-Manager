@@ -4,33 +4,30 @@
       <b-input icon="magnify" v-model="name" style="width: 20rem"></b-input>
     </b-field>
     <b-table
+      style="cursor: pointer; border:none"
       :data="customers"
       :columns="columns"
       paginated
       per-page="5"
       focusable
-      bordered
+      :bordered="false"
       hoverable
-      :loading="customers.length<=0"
-      
       @click="payment"
     >
     </b-table>
   </section>
 </template>
 <script>
-
 export default {
-  
   methods: {
     payment(e) {
-      this.$router.push(`/${e.id}`)
+      this.$router.push(`/${e.id}`);
     },
   },
-  
+
   computed: {
     customers() {
-     let all= this.$store.getters["customer/GET_CUSTOMERS"]
+      let all = this.$store.getters["customer/GET_CUSTOMERS"];
       const regex = new RegExp(`^${this.name.toLowerCase()}`, "g");
       return all.filter(
         ({ company_name, company_owner }) =>
@@ -38,13 +35,12 @@ export default {
           company_owner.toLowerCase().match(regex)
       );
     },
-    
   },
   data() {
     return {
-      showCustomerUpdate:false,
+      
       name: "",
-    
+      
       columns: [
         {
           field: "company_name",
@@ -54,14 +50,13 @@ export default {
           field: "company_owner",
           label: "Firma sahibi",
         },
-         {
+        {
           field: "contact",
           label: "Firma İletişim",
         },
         {
           field: "final_payment_date",
           label: "Son tahsilat tarihi",
-          
         },
         {
           field: "final_payment_amount",
