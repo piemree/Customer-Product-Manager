@@ -94,5 +94,8 @@ export default {
       short_name: 'DM',
       lang: 'en',
     },
+    icon: {
+      fileName: 'app-icon.png',
+    },
   }
 };
