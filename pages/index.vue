@@ -5,7 +5,7 @@
     </b-field>
     <b-table
       :data="customers"
-      :columns="columns"
+      
       paginated
       per-page="5"
       
@@ -61,7 +61,7 @@
 <script>
 export default {
   methods: {
-    //test hubs
+    
     payment(id) {
       this.$router.push(`/${id}`);
     },

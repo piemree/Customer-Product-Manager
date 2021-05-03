@@ -42,12 +42,10 @@ export const actions = {
             ? "Local"
             : "Server";
 
-         
-            context.commit("SET_CUSTOMERS", {
-              ...change.doc.data(),
-              id: change.doc.id
-            });
-          
+          context.commit("SET_CUSTOMERS", {
+            ...change.doc.data(),
+            id: change.doc.id
+          });
         }
         if (change.type === "modified") {
           context.commit("UPDATE_CUSTOMER", {
@@ -59,7 +57,6 @@ export const actions = {
         }
       });
     });
-
   },
 
   async addNewCustomer(context, customer) {
@@ -70,13 +67,13 @@ export const actions = {
         .add({
           company_name: customer.company_name,
           company_owner: customer.company_owner,
-          final_payment_amount:0,
+          final_payment_amount: 0,
           final_payment_date: "-",
           final_sales_amount: 0,
           final_sales_date: "-",
-          current_balance:parseInt(customer.current_balance),
+          current_balance: parseInt(customer.current_balance),
           contact: customer.contact,
-          final_shopping_info:[]
+          final_shopping_info: []
         })
         .then(customerRef => resolve(customerRef))
         .catch(err => reject(err));
@@ -98,10 +95,10 @@ export const actions = {
             .format("lll")
         })
         .then(ok => {
-          resolve("ok")
+          resolve("ok");
         })
         .catch(err => {
-          reject("error")
+          reject("error");
         });
     });
   },
@@ -112,22 +109,20 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    return new Promise((resolve, reject) => {
-    
-      ref.update({
-      current_balance: new_balance,
-      final_sales_amount: customer.sales_amount,
-      final_shopping_info:customer.final_shopping,
-      final_sales_date: moment()
-        .locale("tr")
-        .format("lll")
-    }).then(ok => {
-      resolve("ok")
-    })
-    .catch(err => {
-      reject("error")
+    return new Promise(async (resolve, reject) => {
+      try {
+        await ref.update({
+          current_balance: new_balance,
+          final_sales_amount: customer.sales_amount,
+          final_shopping_info: customer.final_shopping,
+          final_sales_date: moment()
+            .locale("tr")
+            .format("lll")
+        });
+        resolve("ok");
+      } catch (error) {
+        reject(error);
+      }
     });
-  })
-   
   }
 };

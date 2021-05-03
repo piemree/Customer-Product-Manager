@@ -3,9 +3,9 @@
     class="section is-flex is-flex-direction-column is-align-items-center"
   >
     <section>
-      <h3 class="title">Ürün Ekle</h3>
-      <section class="is-flex">
-        <b-field>
+      <h3 style="text-align: center" class="title">Ürün Ekle</h3>
+      <section class="is-flex is-flex-direction-column is-align-items-center">
+        <b-field label="Ürün adı">
           <b-input
             @input="checkEmpty"
             v-model="productName"
@@ -16,10 +16,21 @@
           >
           </b-input>
         </b-field>
+        <b-field label="Stok adeti">
+          <b-input
+            v-model="stock"
+            placeholder="Stok adeti"
+            type="number"
+            icon="calculator"
+            style="max-width: 15rem"
+          >
+          </b-input>
+        </b-field>
         <b-field>
           <b-button
             @click="addProduct"
             class="is-success mx-3"
+            style="min-width: 5rem"
             :disabled="isempty"
             >Ekle</b-button
           >
@@ -29,16 +40,26 @@
 
     <section class="mt-5">
       <h3 style="font-size: 2rem; font-weight: 2rem">Ürünlerimiz</h3>
-      <table class="product-table">
-        <tr v-for="(product, index) in products" :key="index">
-          <td class="is-flex is-justify-content-space-between my-3">
-            <p style="font-size: 1.5rem">{{ index + 1 }}-{{ product.name }}</p>
-            <b-button @click="removeProduct(product.id)" class="is-danger mx-3"
-              >sil</b-button
-            >
-          </td>
-        </tr>
-      </table>
+
+      <b-table :data="products" paginated per-page="10" :bordered="false">
+        <b-table-column field="name" label="Ürün adı" v-slot="props">
+          {{ props.row.name }}
+        </b-table-column>
+        <b-table-column field="stock" label="Stok adeti" v-slot="props">
+          {{ props.row.stock }}
+        </b-table-column>
+        <b-table-column>
+          <b-button style="width: 100%" class="is-warning">Güncelle</b-button>
+        </b-table-column>
+        <b-table-column v-slot="props">
+          <b-button
+            @click="removeProduct(props.row.id)"
+            style="width: 100%"
+            class="is-danger"
+            >Sil</b-button
+          >
+        </b-table-column>
+      </b-table>
     </section>
   </section>
 </template>
@@ -47,6 +68,7 @@ export default {
   data() {
     return {
       productName: "",
+      stock: 0,
       isempty: true,
     };
   },
@@ -60,6 +82,7 @@ export default {
       if (this.productName != "") {
         this.$store.dispatch("product/addNewProduct", {
           name: this.productName,
+          stock: this.stock,
         });
       }
     },
@@ -70,8 +93,6 @@ export default {
       this.$store.dispatch("product/removeProduct", id);
     },
   },
-
- 
 };
 </script>
 <style  scoped >

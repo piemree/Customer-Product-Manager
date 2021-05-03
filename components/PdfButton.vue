@@ -8,6 +8,7 @@
 import "jspdf-autotable"; */
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import moment from "moment";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export default {
@@ -92,7 +93,10 @@ export default {
           },
 
           { text: `Satış bilgileri`, style: "subheader" },
-          { text: `Tarih: ${this.customer.final_sales_date}`, style: "tableHeader" },
+          {
+            text: `Tarih: ${this.customer.final_sales_date}`,
+            style: "tableHeader",
+          },
 
           {
             style: "tableExample",
@@ -134,13 +138,16 @@ export default {
             bold: false,
             fontSize: 8,
             color: "black",
-             margin: [86, -10, 0, 0],
+            margin: [86, -10, 0, 0],
           },
         },
       };
 
-      pdfMake.createPdf(docDefinition).open();
-      pdfMake.createPdf(docDefinition).download()
+      pdfMake
+        .createPdf(docDefinition)
+        .download(
+          `${moment().locale("tr").format("LL")}-${this.customer.company_name}`
+        );
     },
   },
 };

@@ -10,7 +10,7 @@
           icon="calculator"
           :validation-message="errormessage"
           v-model="payment_amount"
-          style="max-width: 15rem"
+          style="max-width: 15rem; min-width: 13rem"
         >
         </b-input>
 
@@ -27,13 +27,13 @@
 
     <section
       class="mt-6 mb-5 is-flex is-justify-content-space-between"
-      style="max-width: 25rem"
+      style="max-width: 30rem"
     >
       <b-field label="Ürün ">
         <b-select v-model="productToAdd.product" placeholder="Select a name">
           <option
             v-for="product in products"
-            :value="product.name"
+            :value="{ id: product.id, name: product.name }"
             :key="product.id"
           >
             {{ product.name }}
@@ -120,16 +120,16 @@ export default {
       errormessage: "Lütfen doğru formatta numara girin",
       totalTablePrice: 0,
       productToAdd: {
-        product: "",
+        product: { id: "", name: "" },
         count: null,
         price: null,
         total: null,
       },
       data: [],
-      checkedRows: [],
+
       columns: [
         {
-          field: "product",
+          field: "product.name",
           label: "Ürün",
         },
         {
@@ -207,7 +207,7 @@ export default {
       this.data.push(this.productToAdd);
 
       this.productToAdd = {
-        product: "",
+        product: { id: "", name: "" },
         count: null,
         price: null,
         total: null,
@@ -267,12 +267,15 @@ export default {
           const loadingComponent = this.$buefy.loading.open();
 
           try {
+            await this.$store.dispatch("product/decreaseProduct", this.data);
+
             await this.$store.dispatch("customer/sell", {
               id: this.customer.id,
               sales_amount: this.sales_amount,
               balance: this.customer.current_balance,
-              final_shopping:this.data
+              final_shopping: this.data,
             });
+
             loadingComponent.close();
             this.$buefy.toast.open({
               message: "İşlem başarıyla tamamlandı",

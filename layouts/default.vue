@@ -13,7 +13,7 @@
         <b-navbar-item tag="router-link" :to="{ path: '/musteri-ekle' }">
           Müşteri Ekle
         </b-navbar-item>
-        <b-navbar-item tag="router-link" :to="{ path: '/urun-ekle' }">
+        <b-navbar-item tag="router-link" :to="{ path: '/admin/urun-ekle' }">
           Ürün Ekle
         </b-navbar-item>
       </template>
