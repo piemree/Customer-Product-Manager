@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <b-field label="Ödeme Miktarı">
+  <section >
+    <b-field class="mt-3" label="Ödeme Miktarı">
       <div style="display: flex">
         <b-input
           placeholder="Ödeme miktarı"
@@ -26,8 +26,8 @@
     </b-field>
 
     <section
-      class="mt-6 mb-5 is-flex is-justify-content-space-between"
-      style="max-width: 30rem"
+      class="mt-5 mb-5 "
+      style=""
     >
       <b-field label="Ürün ">
         <b-select v-model="productToAdd.product" placeholder="Select a name">
@@ -47,7 +47,7 @@
           v-model="productToAdd.count"
           :controls="false"
           validation-message="Lütfen doğru formatta numara girin"
-          style="max-width: 4rem"
+          style="max-width: 30rem"
         >
         </b-numberinput>
       </b-field>
@@ -76,7 +76,12 @@
         />
       </b-field>
 
-      <b-table :data="data" :columns="columns" :mobile-cards="false"> </b-table>
+      <b-table :data="data" :columns="columns" :mobile-cards="false">
+        
+
+        
+        
+         </b-table>
       <b-field class="mt-5"
         ><span> <b>Toplam</b>: {{ totalTablePrice }}</span></b-field
       >

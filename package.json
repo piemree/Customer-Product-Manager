@@ -2,6 +2,9 @@
   "name": "customer-managment",
   "version": "1.0.0",
   "private": true,
+  "quokka": {
+    "babel": true
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",

@@ -5,12 +5,9 @@
     </b-field>
     <b-table
       :data="customers"
-      
       paginated
       per-page="5"
-      
       :bordered="false"
-      
     >
       <b-table-column field="company_name" label="Firma adı" v-slot="props">
         {{ props.row.company_name }}

@@ -28,7 +28,7 @@ export default {
         let subbody = [
           {
             style: "item",
-            text: `${element.product}`,
+            text: `${element.product.name}`,
           },
           {
             style: "item",
