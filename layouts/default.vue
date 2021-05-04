@@ -14,7 +14,7 @@
           Müşteri Ekle
         </b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/admin/urun-ekle' }">
-          Ürün Ekle
+          Ürün Yönetim
         </b-navbar-item>
       </template>
 

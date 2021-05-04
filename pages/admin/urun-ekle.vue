@@ -18,6 +18,7 @@
         </b-field>
         <b-field label="Stok adeti">
           <b-input
+            @input="checkEmptyStock"
             v-model="stock"
             placeholder="Stok adeti"
             type="number"
@@ -31,7 +32,7 @@
             @click="addProduct"
             class="is-success mx-3"
             style="min-width: 5rem"
-            :disabled="isempty"
+            :disabled="!isempty && !isemptyStock ? false : true"
             >Ekle</b-button
           >
         </b-field>
@@ -48,12 +49,17 @@
         <b-table-column field="stock" label="Stok adeti" v-slot="props">
           {{ props.row.stock }}
         </b-table-column>
-        <b-table-column>
-          <b-button style="width: 100%" class="is-warning">Güncelle</b-button>
+        <b-table-column v-slot="props">
+          <b-button
+            @click="updateProduct(props.row)"
+            style="width: 100%"
+            class="is-warning"
+            >Güncelle</b-button
+          >
         </b-table-column>
         <b-table-column v-slot="props">
           <b-button
-            @click="removeProduct(props.row.id)"
+            @click="removeProduct(props.row)"
             style="width: 100%"
             class="is-danger"
             >Sil</b-button
@@ -68,8 +74,9 @@ export default {
   data() {
     return {
       productName: "",
-      stock: 0,
+      stock: "",
       isempty: true,
+      isemptyStock: true,
     };
   },
   computed: {
@@ -79,18 +86,146 @@ export default {
   },
   methods: {
     addProduct() {
-      if (this.productName != "") {
-        this.$store.dispatch("product/addNewProduct", {
-          name: this.productName,
-          stock: this.stock,
+      if (this.productName != "" && this.stock != "") {
+        this.$buefy.dialog.confirm({
+          title: "Uyarı Mesajı",
+          message: `
+                    <p>
+                    <b>Ürün adı:</b>${this.productName}
+                    </p>
+                    <p>
+                    <b>Ürün adeti:</b>${this.stock}
+                    </p>
+                    `,
+          cancelText: "İptal",
+          confirmText: "Onaylıyorum",
+          type: "is-success",
+          onConfirm: async () => {
+            const loadingComponent = this.$buefy.loading.open();
+
+            try {
+              await this.$store.dispatch("product/addNewProduct", {
+                name: this.productName,
+                stock: this.stock,
+              });
+
+              loadingComponent.close();
+              this.$buefy.toast.open({
+                message: "İşlem başarıyla tamamlandı",
+                type: "is-success",
+              });
+            } catch (error) {
+              loadingComponent.close();
+              this.$buefy.dialog.alert({
+                title: "HATA!!!",
+                message: "BİRŞEYLER TERS GİTTİ",
+                type: "is-danger",
+                hasIcon: false,
+                icon: "exclamation",
+                iconPack: "fa",
+                ariaRole: "alertdialog",
+                ariaModal: true,
+              });
+            }
+
+            (this.stock = ""), (this.productName = "");
+          },
         });
       }
     },
     checkEmpty() {
       this.productName != "" ? (this.isempty = false) : (this.isempty = true);
     },
-    removeProduct(id) {
-      this.$store.dispatch("product/removeProduct", id);
+    checkEmptyStock() {
+      this.stock != ""
+        ? (this.isemptyStock = false)
+        : (this.isemptyStock = true);
+    },
+    removeProduct(product) {
+      // this.$store.dispatch("product/removeProduct", id);
+
+      this.$buefy.dialog.confirm({
+        title: "Tüm ürün bilgileri silinecek",
+        message: `
+                    <p>
+                    <b>Ürün adı:</b>${product.name}
+                    </p>
+                    <p>
+                    <b>Ürün adeti:</b>${product.stock}
+                    </p>
+                    `,
+        cancelText: "İptal",
+        confirmText: "Sil",
+        type: "is-danger",
+        onConfirm: async () => {
+          const loadingComponent = this.$buefy.loading.open();
+
+          try {
+            await this.$store.dispatch("product/removeProduct", product.id);
+
+            loadingComponent.close();
+            this.$buefy.toast.open({
+              message: "İşlem başarıyla tamamlandı",
+              type: "is-success",
+            });
+          } catch (error) {
+            loadingComponent.close();
+            this.$buefy.dialog.alert({
+              title: "HATA!!!",
+              message: "BİRŞEYLER TERS GİTTİ",
+              type: "is-danger",
+              hasIcon: false,
+              icon: "exclamation",
+              iconPack: "fa",
+              ariaRole: "alertdialog",
+              ariaModal: true,
+            });
+          }
+        },
+      });
+    },
+    updateProduct(product) {
+      this.$buefy.dialog.prompt({
+        message: `${product.name}`,
+        title:"Stock Güncelle",
+        type:"is-warning",
+        inputAttrs: {
+          type: "number",
+          placeholder: "Stok adeti",
+          value: `${product.stock}`,
+          min: 0,
+        },
+        confirmText: "Güncelle",
+        cancelText: "İptal",
+        trapFocus: true,
+        onConfirm: async (newStock) => {
+          const loadingComponent = this.$buefy.loading.open();
+
+          try {
+            await this.$store.dispatch("product/updateProduct", {
+              id: product.id,
+              newStock: newStock,
+            });
+            loadingComponent.close();
+            this.$buefy.toast.open({
+              message: "İşlem başarıyla tamamlandı",
+              type: "is-success",
+            });
+          } catch (error) {
+            loadingComponent.close();
+            this.$buefy.dialog.alert({
+              title: "HATA!!!",
+              message: "BİRŞEYLER TERS GİTTİ",
+              type: "is-danger",
+              hasIcon: false,
+              icon: "exclamation",
+              iconPack: "fa",
+              ariaRole: "alertdialog",
+              ariaModal: true,
+            });
+          }
+        },
+      });
     },
   },
 };

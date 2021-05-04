@@ -82,22 +82,41 @@ export const actions = {
           });
           resolve("ok");
         } catch (error) {
-          
           reject(error);
         }
       });
     });
   },
+  updateProduct(contect, product) {
+    return new Promise(async (resolve, reject) => {
+      let productRef = this.$fire.firestore
+        .collection("products")
+        .doc(product.id);
+
+      productRef
+        .update({
+          stock: parseInt(product.newStock)
+        })
+        .then(() => {
+          resolve("ok");
+        })
+        .catch(() => {
+          reject("error");
+        });
+    });
+  },
   removeProduct(context, id) {
-    this.$fire.firestore
-      .collection("products")
-      .doc(id)
-      .delete()
-      .then(() => {
-        console.log("Document successfully deleted!");
-      })
-      .catch(error => {
-        console.error("Error removing document: ", error);
-      });
+    return new Promise((resolve, reject) => {
+      this.$fire.firestore
+        .collection("products")
+        .doc(id)
+        .delete()
+        .then(() => {
+          resolve("ok");
+        })
+        .catch(() => {
+          reject("err");
+        });
+    });
   }
 };
