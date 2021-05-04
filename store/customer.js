@@ -1,4 +1,5 @@
-import moment from "moment";
+
+
 export const state = () => ({
   customers: [],
   products: []
@@ -24,6 +25,14 @@ export const getters = {
   },
   GET_CURRENT_CUSTOMER(state) {
     return state.currentCustomer;
+  },
+  GET_TOTAL_BALANCE(state) {
+    let total = 0;
+    state.customers.forEach(customer => {
+      total += customer.current_balance;
+    });
+
+    return total;
   }
 };
 
@@ -42,10 +51,13 @@ export const actions = {
             ? "Local"
             : "Server";
 
-          context.commit("SET_CUSTOMERS", {
-            ...change.doc.data(),
-            id: change.doc.id
-          });
+            console.log(source);
+          if (source === "Server") {
+            context.commit("SET_CUSTOMERS", {
+              ...change.doc.data(),
+              id: change.doc.id
+            });
+          }
         }
         if (change.type === "modified") {
           context.commit("UPDATE_CUSTOMER", {
@@ -90,9 +102,7 @@ export const actions = {
         .update({
           current_balance: new_balance,
           final_payment_amount: parseInt(customer.payment_amount),
-          final_payment_date: moment()
-            .locale("tr")
-            .format("lll")
+          final_payment_date: Date.now()
         })
         .then(ok => {
           resolve("ok");
@@ -115,9 +125,7 @@ export const actions = {
           current_balance: new_balance,
           final_sales_amount: customer.sales_amount,
           final_shopping_info: customer.final_shopping,
-          final_sales_date: moment()
-            .locale("tr")
-            .format("lll")
+          final_sales_date: Date.now()
         });
         resolve("ok");
       } catch (error) {

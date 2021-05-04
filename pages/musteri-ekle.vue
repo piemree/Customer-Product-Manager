@@ -145,5 +145,9 @@ export default {
       });
     },
   },
+  beforeCreate() {
+    this.$isauth();
+  },
+ 
 };
 </script>

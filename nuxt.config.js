@@ -24,9 +24,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    
-  ],
+  plugins: ["~/plugins/convert.js", "~/plugins/isauth.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -46,6 +44,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
 
+    "@nuxtjs/auth-next",
 
     [
       "@nuxtjs/firebase",
@@ -72,10 +71,17 @@ export default {
       // Firestore Settings - currently only works in SPA mode
     }
   },
-
-  env: {
-    API_KEY: "AIzaSyCnArpKquQIrDpcN-oKF5GyyloQW5JnrFk"
+  auth: {
+    persistence: "local", // default
+    initialize: {
+      //onAuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
+     ///*  */ onAuthStateChangedAction: "onAuthStateChangedAction",
+      subscribeManually: false
+    },
+    ssr: false
   },
+
+ 
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -86,16 +92,16 @@ export default {
   },
   pwa: {
     meta: {
-      title: 'musteri-yonetim',
-      author: 'Emre',
+      title: "musteri-yonetim",
+      author: "Emre"
     },
     manifest: {
-      name: 'Müsteri Takip',
-      short_name: 'DM',
-      lang: 'en',
+      name: "Müsteri Takip",
+      short_name: "DM",
+      lang: "en"
     },
     icon: {
-      fileName: 'app-icon.png',
-    },
+      fileName: "app-icon.png"
+    }
   }
 };

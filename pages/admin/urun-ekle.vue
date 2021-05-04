@@ -42,7 +42,13 @@
     <section class="mt-5">
       <h3 style="font-size: 2rem; font-weight: 2rem">Ürünlerimiz</h3>
 
-      <b-table :data="products" paginated per-page="10" :bordered="false">
+      <b-table
+        :mobile-cards="false"
+        :data="products"
+        paginated
+        per-page="10"
+        :bordered="false"
+      >
         <b-table-column field="name" label="Ürün adı" v-slot="props">
           {{ props.row.name }}
         </b-table-column>
@@ -187,8 +193,8 @@ export default {
     updateProduct(product) {
       this.$buefy.dialog.prompt({
         message: `${product.name}`,
-        title:"Stock Güncelle",
-        type:"is-warning",
+        title: "Stock Güncelle",
+        type: "is-warning",
         inputAttrs: {
           type: "number",
           placeholder: "Stok adeti",
@@ -226,6 +232,18 @@ export default {
           }
         },
       });
+    },
+    beforeCreate() {
+      this.$isauth();
+      let isadmin = this.$store.getters["auth2/GET_İSADMİN"];
+      if (!isadmin) {
+        this.$router.push("/");
+      }
+    },
+    watch: {
+      $router() {
+        this.$isauth();
+      },
     },
   },
 };

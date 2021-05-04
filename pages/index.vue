@@ -23,7 +23,7 @@
         label="Son tahsilat tarihi"
         v-slot="props"
       >
-        {{ props.row.final_payment_date }}
+        {{ $convert(props.row.final_payment_date) }}
       </b-table-column>
       <b-table-column
         field="final_payment_amount"
@@ -44,7 +44,7 @@
         label="Son satış tarihi"
         v-slot="props"
       >
-        {{ props.row.final_sales_date }}
+        {{ $convert(props.row.final_sales_date) }}
       </b-table-column>
       <b-table-column field="current_balance" label="Bakiye" v-slot="props">
         {{ props.row.current_balance }}
@@ -79,40 +79,7 @@ export default {
     return {
       name: "",
 
-      /* columns: [
-        {
-          field: "company_name",
-          label: "Firma adı",
-        },
-        {
-          field: "company_owner",
-          label: "Firma sahibi",
-        },
-        {
-          field: "contact",
-          label: "Firma İletişim",
-        },
-        {
-          field: "final_payment_date",
-          label: "Son tahsilat tarihi",
-        },
-        {
-          field: "final_payment_amount",
-          label: "Son tahsilat miktarı",
-        },
-        {
-          field: "final_sales_amount",
-          label: "Son satış miktarı",
-        },
-        {
-          field: "final_sales_date",
-          label: "Son satış tarihi",
-        },
-        {
-          field: "current_balance",
-          label: "Güncel bakiye",
-        },
-      ], */
+      /*  */
     };
   },
 };

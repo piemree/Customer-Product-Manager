@@ -49,7 +49,7 @@ export default {
       let docDefinition = {
         content: [
           {
-            text: "DM KİMYA MÜŞTERİ BİLGİLENDİRME BELGESİ",
+            text: "DM GARAGE MÜŞTERİ BİLGİLENDİRME FORMU",
             style: "header",
             alignment: "center",
           },
@@ -72,13 +72,13 @@ export default {
                   { style: "item", text: `${this.customer.company_name}` },
                   {
                     style: "item",
-                    text: `${this.customer.final_payment_date}`,
+                    text: `${this.$convert(this.customer.final_payment_date)}`,
                   },
                   {
                     style: "item",
                     text: `${this.customer.final_payment_amount} TL`,
                   },
-                  { style: "item", text: `${this.customer.final_sales_date}` },
+                  { style: "item", text: `${this.$convert(this.customer.final_sales_date)}` },
                   {
                     style: "item",
                     text: `${this.customer.final_sales_amount} TL`,
@@ -92,9 +92,9 @@ export default {
             },
           },
 
-          { text: `Satış bilgileri`, style: "subheader" },
+          { text: `Satış Bilgileri`, style: "subheader" },
           {
-            text: `Tarih: ${this.customer.final_sales_date}`,
+            text: `Tarih: ${this.$convert(this.customer.final_sales_date)}`,
             style: "tableHeader",
           },
 
@@ -107,6 +107,36 @@ export default {
           {
             text: `Toplam: ${this.customer.final_sales_amount} TL`,
             style: "productTotal",
+          },
+          {
+            text: [
+              { text: "ADRES: ", bold: "true" },
+              `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`,
+            ],
+            style: "adres",
+          },
+          {
+            text: [{ text: `TEL1: `, bold: "true" }, `0224 250 8935`],
+            style: "info",
+          },
+          {
+            text: [{ text: `TEL2: `, bold: "true" }, `0544 250 8935`],
+            style: "info",
+          },
+          {
+            text: [{ text: `TEL3: `, bold: "true" }, `0545 250 8935`],
+            style: "info",
+          },
+          {
+            text: `Ayşe DEMİR Türkiye İş Bankası `,
+            style: "iban",
+          },
+          {
+            text: [
+              { text: `İBAN:  `, bold: "true" },
+              `TR200006400000122060670122`,
+            ],
+            style: "ibanno",
           },
         ],
 
@@ -135,10 +165,34 @@ export default {
             color: "black",
           },
           productTotal: {
-            bold: false,
-            fontSize: 8,
+            bold: true,
+            fontSize: 10,
+            margin: [0, 0, 0, 50],
             color: "black",
-            margin: [86, -10, 0, 0],
+          },
+          info: {
+            bold: false,
+            fontSize: 9,
+            color: "black",
+          },
+
+          adres: {
+            bold: false,
+            fontSize: 9,
+            margin: [0, 0, 0, 5],
+            color: "black",
+          },
+          iban: {
+            bold: false,
+            fontSize: 9,
+            margin: [0, 5, 0, 0],
+            color: "black",
+          },
+          ibanno: {
+            bold: false,
+            fontSize: 9,
+            margin: [0, 0, 0, 0],
+            color: "black",
           },
         },
       };

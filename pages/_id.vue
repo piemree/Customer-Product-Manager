@@ -44,7 +44,7 @@
           label="Son tahsilat tarihi"
           v-slot="props"
         >
-          {{ props.row.final_payment_date }}
+          {{ $convert(props.row.final_payment_date) }}
         </b-table-column>
         <b-table-column
           field="final_payment_amount"
@@ -65,7 +65,7 @@
           label="Son satış tarihi"
           v-slot="props"
         >
-          {{ props.row.final_sales_date }}
+          {{ $convert(props.row.final_sales_date) }}
         </b-table-column>
         <b-table-column field="current_balance" label="Bakiye" v-slot="props">
           {{ props.row.current_balance }}
@@ -112,5 +112,9 @@ export default {
       return new Array(customer);
     },
   },
+  beforeCreate() {
+    this.$isauth();
+  },
+ 
 };
 </script>
