@@ -51,7 +51,13 @@ export default {
       {
         config: fireConfig,
         services: {
-          auth: true,
+          auth: {
+            static: true,
+            persistence: "none",
+            initialize: {
+              onAuthStateChangedAction: 'auth2/onAuthStateChangedAction',
+            }
+          },
           firestore: true,
           functions: true,
           storage: true,
@@ -60,28 +66,23 @@ export default {
       }
     ]
   ],
-
-  firestore: {
+  /* firestore: {
     memoryOnly: false, // default
-    chunkName: process.env.NODE_ENV !== "production" ? "firebase-auth" : "[id]", // default
+    chunkName: process.env.NODE_ENV !== "production" ? "firebase-auth" : "[id]",
     enablePersistence: true,
     emulatorPort: 3000,
     emulatorHost: "localhost",
-    settings: {
-      // Firestore Settings - currently only works in SPA mode
-    }
-  },
-  auth: {
-    persistence: "local", // default
+    settings: {}
+  }, */
+
+  /* auth: {
+    persistence: "none", // default
     initialize: {
-      //onAuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
-     ///*  */ onAuthStateChangedAction: "onAuthStateChangedAction",
+      
       subscribeManually: false
     },
     ssr: false
-  },
-
- 
+  }, */
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
@@ -103,5 +104,10 @@ export default {
     icon: {
       fileName: "app-icon.png"
     }
+  },
+  //middleware: ["userAuth"],
+
+  router: {
+    middleware: "userAuth"
   }
 };

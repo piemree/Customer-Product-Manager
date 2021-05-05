@@ -1,21 +1,18 @@
 export const state = () => ({
-  user: null,
   admin: false,
-  loggedIn: false
+  user: null
 });
 
 export const mutations = {
   SET_USER(state, authUser) {
-    const { uid, email } = authUser;
-    state.user = { uid, email };
+    state.user = authUser;
   },
   SET_ADMİN(state, isAdmin) {
     state.admin = isAdmin;
   },
   SET_USER_LOGGEDIN(state, loggedin) {
     state.loggedIn = loggedin;
-  },
-  
+  }
 };
 
 export const getters = {
@@ -31,22 +28,35 @@ export const getters = {
 };
 
 export const actions = {
+  onAuthStateChangedAction: (ctx, { authUser, claims }) => {
+    console.log(authUser);
+    if (!authUser) {
+      ctx.commit("SET_ADMİN", false);
+      ctx.commit("SET_USER", null);
+    } else {
+      ctx.commit("SET_ADMİN", claims.admin);
+      ctx.commit("SET_USER", authUser.email);
+    }
+  },
+
   login(context, userlogin) {
-    this.$fire.auth
-      .signInWithEmailAndPassword(userlogin.email, userlogin.password)
-      .then(({ user }) => {
-        context.commit("SET_USER", user);
-        context.commit("SET_USER_LOGGEDIN", true);
-        context.dispatch("isAdmin");
-        this.$router.push("/");
-      })
-      .catch(err => {});
+    return new Promise((resolve, reject) => {
+      this.$fire.auth
+        .signInWithEmailAndPassword(userlogin.email, userlogin.password)
+        .then(() => {
+          this.$router.push("/");
+          resolve("ok");
+        })
+        .catch(err => {
+          reject("error");
+        });
+    });
   },
   signout(context) {
     this.$fire.auth
       .signOut()
       .then(() => {
-        context.commit("SET_USER_LOGGEDIN", false);
+        // context.commit("SET_USER_LOGGEDIN", false);
         this.$router.push("/auth/login");
       })
       .catch(error => {

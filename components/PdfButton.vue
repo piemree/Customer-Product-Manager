@@ -1,6 +1,8 @@
 <template >
-  <div class="mt-5 is-flex is-justify-content-center">
-    <b-button @click="downloadPdf" class="is-danger">PDF İNDİR</b-button>
+  <div class="is-flex is-justify-content-center" style="width: 100%">
+    <b-button style="width: 100%" @click="downloadPdf" class="is-danger"
+      >PDF</b-button
+    >
   </div>
 </template>
 <script>
@@ -53,7 +55,36 @@ export default {
             style: "header",
             alignment: "center",
           },
-
+            {
+            text: [{ text: `TEL1: `, bold: "true" }, `0224 250 8935`],
+            style: "info",
+          },
+          {
+            text: [{ text: `TEL2: `, bold: "true" }, `0544 250 8935`],
+            style: "info",
+          },
+          {
+            text: [{ text: `TEL3: `, bold: "true" }, `0545 250 8935`],
+            style: "info",
+          },
+          {
+            text: `Ayşe DEMİR Türkiye İş Bankası `,
+            style: "iban",
+          },
+          {
+            text: [
+              { text: `İBAN:  `, bold: "true" },
+              `TR200006400000122060670122`,
+            ],
+            style: "ibanno",
+          },
+           {
+            text: [
+              { text: "ADRES: ", bold: "true" },
+              `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`,
+            ],
+            style: "adres",
+          },
           { text: "Firma Bilgileri", style: "subheader" },
 
           {
@@ -78,7 +109,10 @@ export default {
                     style: "item",
                     text: `${this.customer.final_payment_amount} TL`,
                   },
-                  { style: "item", text: `${this.$convert(this.customer.final_sales_date)}` },
+                  {
+                    style: "item",
+                    text: `${this.$convert(this.customer.final_sales_date)}`,
+                  },
                   {
                     style: "item",
                     text: `${this.customer.final_sales_amount} TL`,
@@ -108,14 +142,8 @@ export default {
             text: `Toplam: ${this.customer.final_sales_amount} TL`,
             style: "productTotal",
           },
-          {
-            text: [
-              { text: "ADRES: ", bold: "true" },
-              `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`,
-            ],
-            style: "adres",
-          },
-          {
+         
+        /*   {
             text: [{ text: `TEL1: `, bold: "true" }, `0224 250 8935`],
             style: "info",
           },
@@ -138,6 +166,13 @@ export default {
             ],
             style: "ibanno",
           },
+           {
+            text: [
+              { text: "ADRES: ", bold: "true" },
+              `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`,
+            ],
+            style: "adres",
+          }, */
         ],
 
         styles: {
@@ -172,36 +207,42 @@ export default {
           },
           info: {
             bold: false,
-            fontSize: 9,
+            fontSize: 8,
             color: "black",
+            alignment: 'right'
           },
 
           adres: {
             bold: false,
-            fontSize: 9,
+            fontSize: 8,
             margin: [0, 0, 0, 5],
             color: "black",
+            alignment: 'right'
           },
           iban: {
             bold: false,
-            fontSize: 9,
+            fontSize: 8,
             margin: [0, 5, 0, 0],
             color: "black",
+            alignment: 'right'
           },
           ibanno: {
             bold: false,
-            fontSize: 9,
+            fontSize: 8,
             margin: [0, 0, 0, 0],
             color: "black",
+            alignment: 'right'
           },
         },
       };
 
-      pdfMake
+      /*   pdfMake
         .createPdf(docDefinition)
         .download(
           `${moment().locale("tr").format("LL")}-${this.customer.company_name}`
-        );
+        ); */
+
+      pdfMake.createPdf(docDefinition).open();
     },
   },
 };

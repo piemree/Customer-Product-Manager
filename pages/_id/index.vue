@@ -1,30 +1,6 @@
 <template >
   <div class="section is-flex is-justify-content-center">
     <section v-if="customer">
-      <!-- <b-field label="Firma Adı">
-        <b-input :value="customer.company_name" disabled></b-input>
-      </b-field>
-      <b-field label="Firma Sahibi">
-        <b-input :value="customer.company_owner" disabled></b-input>
-      </b-field>
-      <b-field label="Firma İletişim">
-        <b-input :value="customer.contact" disabled></b-input>
-      </b-field>
-      <b-field label="Son Tahsilat Tarihi">
-        <b-input :value="customer.final_payment_date" disabled></b-input>
-      </b-field>
-      <b-field label="Son Tahsilat Miktarı">
-        <b-input :value="customer.final_payment_amount" disabled></b-input>
-      </b-field>
-      <b-field label="Son Satış Tarihi">
-        <b-input :value="customer.final_sales_date" disabled></b-input>
-      </b-field>
-      <b-field label="Son Satış Miktarı">
-        <b-input :value="customer.final_sales_amount" disabled></b-input>
-      </b-field>
-      <b-field label="Güncel Bakiye">
-        <b-input :value="customer.current_balance" disabled></b-input>
-      </b-field> -->
       <b-table :data="customers">
         <b-table-column field="company_name" label="Firma adı" v-slot="props">
           {{ props.row.company_name }}
@@ -72,12 +48,21 @@
         </b-table-column>
 
         <b-table-column>
-          <b-button style="width: 100%" class="is-warning">Güncelle</b-button>
+          <b-button @click="showDetails" style="width: 100%" class="is-danger is-light"
+            >Detay</b-button
+          >
+        </b-table-column>
+        <b-table-column>
+          <b-button @click="update" style="width: 100%" class="is-warning"
+            >Güncelle</b-button
+          >
+        </b-table-column>
+        <b-table-column>
+          <PdfButton :customer="customer" />
         </b-table-column>
       </b-table>
 
       <Payment :customer="customer" />
-      <PdfButton :customer="customer" />
     </section>
     <section
       v-else
@@ -90,10 +75,14 @@
 <script>
 import Payment from "@/components/Payment";
 import PdfButton from "@/components/PdfButton";
+
 export default {
-  data() {
-    return {};
+  middleware(ctx) {
+    if (!ctx.$fire.auth.currentUser) {
+      ctx.redirect("/auth/login");
+    }
   },
+
   component: {
     Payment,
     PdfButton,
@@ -109,12 +98,46 @@ export default {
       let customer = all.filter(
         ({ id }) => id.toString() === this.$route.params.id
       )[0];
+
+      this.$store.commit("customer/SET_CUSTOMER", customer);
+      console.log(this.$store);
       return new Array(customer);
     },
   },
-  beforeCreate() {
-    this.$isauth();
+  methods: {
+    update() {
+      let id = this.$route.params.id;
+      this.$router.push(`/${id}/update`);
+    },
+    showDetails() {
+      this.$buefy.dialog.alert({
+        title: "Tüm Bilgiler",
+        message: `
+                   <p>
+                    <b>Firma adı:</b>${this.customer.company_name}
+                    </p>
+                    <p>
+                    <b>Firma sahibi:</b>${this.customer.company_owner}
+                    </p>
+                    <p>
+                    <b>İletişim:</b>${this.customer.contact}
+                    </p>
+                    <p>
+                    <b>Ünvan:</b>${this.customer.tax_title}
+                    </p>
+                    <p>
+                    <b>Vergi dairesi:</b>${this.customer.tax_administration}
+                    </p>
+                    <p>
+                    <b>Vergi no:</b>${this.customer.tax_no}
+                    </p>
+                    <p>
+                    <b>Adres:</b>${this.customer.adress}
+                    </p>
+                    `,
+        confirmText: "OK",
+      });
+    },
   },
- 
 };
 </script>

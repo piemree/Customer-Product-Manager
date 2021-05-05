@@ -3,12 +3,7 @@
     <b-field label="Firma Ara">
       <b-input icon="magnify" v-model="name" style="width: 20rem"></b-input>
     </b-field>
-    <b-table
-      :data="customers"
-      paginated
-      per-page="5"
-      :bordered="false"
-    >
+    <b-table :data="customers" paginated per-page="5" :bordered="false">
       <b-table-column field="company_name" label="Firma adı" v-slot="props">
         {{ props.row.company_name }}
       </b-table-column>
@@ -50,15 +45,23 @@
         {{ props.row.current_balance }}
       </b-table-column>
       <b-table-column v-slot="props">
-        <b-button style="width:100%" @click="payment(props.row.id)">İncele</b-button>
+        <b-button style="width: 100%" @click="payment(props.row.id)"
+          >İncele</b-button
+        >
       </b-table-column>
     </b-table>
   </section>
 </template>
 <script>
 export default {
-  methods: {
+  middleware(ctx) {
     
+   if (!ctx.$fire.auth.currentUser) {
+     
+      ctx.redirect("/auth/login");
+   }
+  },
+  methods: {
     payment(id) {
       this.$router.push(`/${id}`);
     },

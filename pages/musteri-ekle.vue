@@ -57,6 +57,11 @@
 
 <script>
 export default {
+  middleware(ctx) {
+    if (!ctx.$fire.auth.currentUser) {
+      ctx.redirect("/auth/login");
+    }
+  },
   data() {
     return {
       newCustomer: {
@@ -144,9 +149,6 @@ export default {
         },
       });
     },
-  },
-  beforeCreate() {
-    this.$isauth();
   },
  
 };

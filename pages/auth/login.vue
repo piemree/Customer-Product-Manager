@@ -37,7 +37,11 @@
 
 <script>
 export default {
-  layout: "default",
+  middleware(ctx) {
+    if (ctx.$fire.auth.currentUser) {
+      ctx.redirect("/");
+    }
+  },
   data() {
     return {
       user: {
@@ -47,14 +51,27 @@ export default {
     };
   },
   methods: {
-    signin() {
-      this.$store.dispatch("auth2/login", this.user);
+    async signin() {
+      const loadingComponent = this.$buefy.loading.open();
+      try {
+        await this.$store.dispatch("auth2/login", this.user);
+
+        loadingComponent.close();
+        this.$buefy.toast.open({
+          message: "Giriş Başarılı",
+          type: "is-success",
+        });
+      } catch (error) {
+
+          loadingComponent.close();
+          this.$buefy.toast.open({
+          message: "Hatalı giriş",
+          type: "is-danger",
+        });
+
+      }
     },
   },
-  beforeCreate() {
-    this.$isauth();
-  },
- 
 };
 </script>
 

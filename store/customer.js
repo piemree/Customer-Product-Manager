@@ -1,21 +1,19 @@
-
-
 export const state = () => ({
   customers: [],
-  products: []
+  products: [],
+  customer: {}
 });
 
 export const mutations = {
   SET_CUSTOMERS(state, customer) {
     state.customers.push(customer);
   },
+  SET_CUSTOMER(state, customer) {
+    state.customer = customer;
+  },
   UPDATE_CUSTOMER(state, data) {
     let index = state.customers.findIndex(customer => customer.id === data.id);
-
     this._vm.$set(state.customers, index, data);
-  },
-  SET_CURRENT_CUSTOMER(state, customer) {
-    state.currentCustomer = customer;
   }
 };
 
@@ -24,7 +22,7 @@ export const getters = {
     return state.customers;
   },
   GET_CURRENT_CUSTOMER(state) {
-    return state.currentCustomer;
+    return state.customer;
   },
   GET_TOTAL_BALANCE(state) {
     let total = 0;
@@ -37,11 +35,11 @@ export const getters = {
 };
 
 export const actions = {
-  async updateBacalance(contex, data) {
+  /* async updateBacalance(contex, data) {
     const query = await this.$fire.firestore
       .collection("customers")
       .where("id", "==", `${data.id}`);
-  },
+  }, */
 
   async getAllCustomersRealTime(context) {
     this.$fire.firestore.collection("customers").onSnapshot(querySnapshot => {
@@ -51,7 +49,6 @@ export const actions = {
             ? "Local"
             : "Server";
 
-            console.log(source);
           if (source === "Server") {
             context.commit("SET_CUSTOMERS", {
               ...change.doc.data(),
@@ -85,6 +82,10 @@ export const actions = {
           final_sales_date: "-",
           current_balance: parseInt(customer.current_balance),
           contact: customer.contact,
+          tax_title: "",
+          tax_administration: "",
+          tax_no: "",
+          adress: "",
           final_shopping_info: []
         })
         .then(customerRef => resolve(customerRef))
@@ -129,6 +130,31 @@ export const actions = {
         });
         resolve("ok");
       } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  async updateCustomer(context, updatedCustomer) {
+    let ref = this.$fire.firestore
+      .collection("customers")
+      .doc(updatedCustomer.id);
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        await ref.update({
+          company_name: updatedCustomer.company_name,
+          company_owner: updatedCustomer.company_owner,
+          contact: updatedCustomer.contact,
+          tax_title: updatedCustomer.tax_title,
+          tax_administration: updatedCustomer.tax_administration,
+          tax_no: updatedCustomer.tax_no,
+          adress: updatedCustomer.adress
+        });
+
+        console.log("okk");
+        resolve("ok");
+      } catch (error) {
+        console.log(error);
         reject(error);
       }
     });

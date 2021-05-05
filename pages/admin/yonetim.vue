@@ -1,84 +1,95 @@
 <template >
-  <section
-    class="section is-flex is-flex-direction-column is-align-items-center"
-  >
-    <section>
-      <h3 style="text-align: center" class="title">Ürün Ekle</h3>
-      <section class="is-flex is-flex-direction-column is-align-items-center">
-        <b-field label="Ürün adı">
-          <b-input
-            @input="checkEmpty"
-            v-model="productName"
-            placeholder="Ürün adı"
-            type="text"
-            icon="store"
-            style="max-width: 15rem"
+    <b-tabs v-model="activeTab">
+      <b-tab-item label="ÜRÜN EKLE">
+        <section>
+        
+          <section
+            class="is-flex is-flex-direction-column is-align-items-center"
           >
-          </b-input>
-        </b-field>
-        <b-field label="Stok adeti">
-          <b-input
-            @input="checkEmptyStock"
-            v-model="stock"
-            placeholder="Stok adeti"
-            type="number"
-            icon="calculator"
-            style="max-width: 15rem"
-          >
-          </b-input>
-        </b-field>
-        <b-field>
-          <b-button
-            @click="addProduct"
-            class="is-success mx-3"
-            style="min-width: 5rem"
-            :disabled="!isempty && !isemptyStock ? false : true"
-            >Ekle</b-button
-          >
-        </b-field>
-      </section>
-    </section>
+            <b-field label="Ürün adı">
+              <b-input
+                @input="checkEmpty"
+                v-model="productName"
+                placeholder="Ürün adı"
+                type="text"
+                icon="store"
+                style="max-width: 15rem"
+              >
+              </b-input>
+            </b-field>
+            <b-field label="Stok adeti">
+              <b-input
+                @input="checkEmptyStock"
+                v-model="stock"
+                placeholder="Stok adeti"
+                type="number"
+                icon="calculator"
+                style="max-width: 15rem"
+              >
+              </b-input>
+            </b-field>
+            <b-field>
+              <b-button
+                @click="addProduct"
+                class="is-success mx-3"
+                style="min-width: 5rem"
+                :disabled="!isempty && !isemptyStock ? false : true"
+                >Ekle</b-button
+              >
+            </b-field>
+          </section>
+        </section>
+      </b-tab-item>
+      <b-tab-item label="ÜRÜNLER">
+        <section class="mt-5">
+        
 
-    <section class="mt-5">
-      <h3 style="font-size: 2rem; font-weight: 2rem">Ürünlerimiz</h3>
-
-      <b-table
-        :mobile-cards="false"
-        :data="products"
-        paginated
-        per-page="10"
-        :bordered="false"
-      >
-        <b-table-column field="name" label="Ürün adı" v-slot="props">
-          {{ props.row.name }}
-        </b-table-column>
-        <b-table-column field="stock" label="Stok adeti" v-slot="props">
-          {{ props.row.stock }}
-        </b-table-column>
-        <b-table-column v-slot="props">
-          <b-button
-            @click="updateProduct(props.row)"
-            style="width: 100%"
-            class="is-warning"
-            >Güncelle</b-button
+          <b-table
+            :mobile-cards="false"
+            :data="products"
+            paginated
+            per-page="10"
+            :bordered="false"
           >
-        </b-table-column>
-        <b-table-column v-slot="props">
-          <b-button
-            @click="removeProduct(props.row)"
-            style="width: 100%"
-            class="is-danger"
-            >Sil</b-button
-          >
-        </b-table-column>
-      </b-table>
-    </section>
-  </section>
+            <b-table-column field="name" label="Ürün adı" v-slot="props">
+              {{ props.row.name }}
+            </b-table-column>
+            <b-table-column field="stock" label="Stok adeti" v-slot="props">
+              {{ props.row.stock }}
+            </b-table-column>
+            <b-table-column v-slot="props">
+              <b-button
+                @click="updateProduct(props.row)"
+                style="width: 100%"
+                class="is-warning"
+                >Güncelle</b-button
+              >
+            </b-table-column>
+            <b-table-column v-slot="props">
+              <b-button
+                @click="removeProduct(props.row)"
+                style="width: 100%"
+                class="is-danger"
+                >Sil</b-button
+              >
+            </b-table-column>
+          </b-table>
+        </section>
+      </b-tab-item>
+    </b-tabs>
 </template>
 <script>
 export default {
+  middleware(ctx) {
+    if (!ctx.$fire.auth.currentUser) {
+      return ctx.redirect("/auth/login");
+    } else if (!ctx.store.getters["auth2/GET_İSADMİN"]) {
+      return ctx.redirect("/");
+    }
+  },
   data() {
     return {
+      activeTab: 0,
       productName: "",
       stock: "",
       isempty: true,
@@ -232,18 +243,6 @@ export default {
           }
         },
       });
-    },
-    beforeCreate() {
-      this.$isauth();
-      let isadmin = this.$store.getters["auth2/GET_İSADMİN"];
-      if (!isadmin) {
-        this.$router.push("/");
-      }
-    },
-    watch: {
-      $router() {
-        this.$isauth();
-      },
     },
   },
 };

@@ -1,122 +1,125 @@
 <template>
-  <section >
-    <b-field class="mt-3" label="Ödeme Miktarı">
-      <div style="display: flex">
-        <b-input
-          placeholder="Ödeme miktarı"
-          type="number"
-          min="0"
-          :max="maxpayamount"
-          icon="calculator"
-          :validation-message="errormessage"
-          v-model="payment_amount"
-          style="max-width: 15rem; min-width: 13rem"
-        >
-        </b-input>
+  <section class="mt-3">
+    <b-tabs v-model="activeTab">
+      <b-tab-item label="TAHSİLAT">
+        <b-field class="mt-3" label="Ödeme Miktarı">
+          <div style="display: flex">
+            <b-input
+              placeholder="Ödeme miktarı"
+              type="number"
+              min="0"
+              :max="maxpayamount"
+              icon="calculator"
+              :validation-message="errormessage"
+              v-model="payment_amount"
+              style="max-width: 15rem;min-width:12rem"
+            >
+            </b-input>
 
-        <p class="control">
-          <b-button
-            @click="getpaid"
-            :disabled="!paybtn"
-            type="is-success"
-            label="Ödeme Al"
-          />
-        </p>
-      </div>
-    </b-field>
+            <p class="control">
+              <b-button
+                @click="getpaid"
+                :disabled="!paybtn"
+                type="is-success"
+                label="Ödeme Al"
+              />
+            </p>
+          </div>
+        </b-field>
+      </b-tab-item>
 
-    <section
-      class="mt-5 mb-5 "
-      style=""
-    >
-      <b-field label="Ürün ">
-        <b-select v-model="productToAdd.product" placeholder="Select a name">
-          <option
-            v-for="product in products"
-            :value="{ id: product.id, name: product.name }"
-            :key="product.id"
+      <b-tab-item label="SATIŞ">
+        <section class="mt-5 mb-5" style="">
+          <b-field label="Ürün ">
+            <b-select
+              v-model="productToAdd.product"
+              placeholder="Select a name"
+            >
+              <option
+                v-for="product in products"
+                :value="{ id: product.id, name: product.name }"
+                :key="product.id"
+              >
+                {{ product.name }}
+              </option>
+            </b-select>
+          </b-field>
+          <b-field label="Adet">
+            <b-numberinput
+              type="number"
+              min="0"
+              v-model="productToAdd.count"
+              :controls="false"
+              validation-message="Lütfen doğru formatta numara girin"
+              style="max-width: 30rem; width:14rem"
+            >
+            </b-numberinput>
+          </b-field>
+          <b-field label="Fiyat">
+            <b-numberinput
+              type="number"
+              min="0"
+              v-model="productToAdd.price"
+              :controls="false"
+              validation-message="Lütfen doğru formatta numara girin"
+              style="max-width: 10rem"
+            >
+            </b-numberinput>
+            <b-button @click="add" type="is-success" label="Ekle" />
+          </b-field>
+        </section>
+
+        <section v-show="data.length > 0" style="max-width: 30rem">
+          <b-field grouped group-multiline>
+            <b-button
+              label="Temizle"
+              type="is-danger"
+              icon-left="close"
+              class="field"
+              @click="data = []"
+            />
+          </b-field>
+
+          <b-table :data="data" :columns="columns" :mobile-cards="false">
+          </b-table>
+          <b-field class="mt-5"
+            ><span> <b>Toplam</b>: {{ totalTablePrice }}</span></b-field
           >
-            {{ product.name }}
-          </option>
-        </b-select>
-      </b-field>
-      <b-field label="Adet">
-        <b-numberinput
-          type="number"
-          min="0"
-          v-model="productToAdd.count"
-          :controls="false"
-          validation-message="Lütfen doğru formatta numara girin"
-          style="max-width: 30rem"
-        >
-        </b-numberinput>
-      </b-field>
-      <b-field label="Fiyat">
-        <b-numberinput
-          type="number"
-          min="0"
-          v-model="productToAdd.price"
-          :controls="false"
-          validation-message="Lütfen doğru formatta numara girin"
-          style="max-width: 5.5rem"
-        >
-        </b-numberinput>
-        <b-button @click="add" type="is-success" label="Ekle" />
-      </b-field>
-    </section>
+        </section>
 
-    <section v-show="data.length > 0" style="max-width: 30rem">
-      <b-field grouped group-multiline>
-        <b-button
-          label="Temizle"
-          type="is-danger"
-          icon-left="close"
-          class="field"
-          @click="data = []"
-        />
-      </b-field>
+        <b-field class="mt-5" label="Satış Miktarı">
+          <div style="display: flex">
+            <b-input
+              placeholder="Satış miktarı"
+              type="number"
+              min="0"
+              icon="calculator"
+              disabled
+              validation-message="Lütfen doğru formatta numara girin"
+              v-model="sales_amount"
+              style="max-width: 15rem"
+            >
+            </b-input>
 
-      <b-table :data="data" :columns="columns" :mobile-cards="false">
-        
-
-        
-        
-         </b-table>
-      <b-field class="mt-5"
-        ><span> <b>Toplam</b>: {{ totalTablePrice }}</span></b-field
-      >
-    </section>
-
-    <b-field class="mt-5" label="Satış Miktarı">
-      <div style="display: flex">
-        <b-input
-          placeholder="Satış miktarı"
-          type="number"
-          min="0"
-          icon="calculator"
-          disabled
-          validation-message="Lütfen doğru formatta numara girin"
-          v-model="sales_amount"
-          style="max-width: 15rem"
-        >
-        </b-input>
-
-        <p class="control">
-          <b-button
-            @click="sell"
-            :disabled="!salebtn"
-            type="is-success"
-            label="Satış Yap"
-          />
-        </p>
-      </div>
-    </b-field>
+            <p class="control">
+              <b-button
+                @click="sell"
+                :disabled="!salebtn"
+                type="is-success"
+                label="Satış Yap"
+              />
+            </p>
+          </div>
+        </b-field>
+      </b-tab-item>
+    </b-tabs>
   </section>
 </template>
 <script>
 export default {
   data() {
     return {
+      activeTab: 0,
       payment_amount: null,
       sales_amount: null,
       paybtn: false,
@@ -209,14 +212,22 @@ export default {
       this.productToAdd.total =
         parseInt(this.productToAdd.count) * parseInt(this.productToAdd.price);
 
-      this.data.push(this.productToAdd);
+      if (
+        this.productToAdd.count != (null || "" || 0) &&
+        this.productToAdd.price != (null || "" || 0) &&
+        this.productToAdd.total != (null || "" || 0) &&
+        this.productToAdd.product.id != "" &&
+        this.productToAdd.product.name != ""
+      ) {
+        this.data.push(this.productToAdd);
 
-      this.productToAdd = {
-        product: { id: "", name: "" },
-        count: null,
-        price: null,
-        total: null,
-      };
+        this.productToAdd = {
+          product: { id: "", name: "" },
+          count: null,
+          price: null,
+          total: null,
+        };
+      }
     },
     getpaid() {
       this.$buefy.dialog.confirm({

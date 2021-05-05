@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar v-if="islogged">
+    <b-navbar v-if="user">
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
           <h1>DMGARAGE</h1>
@@ -19,7 +19,7 @@
         <b-navbar-item
           v-if="admin"
           tag="router-link"
-          :to="{ path: '/admin/urun-ekle' }"
+          :to="{ path: '/admin/yonetim' }"
         >
           Ürün Yönetim
         </b-navbar-item>
@@ -46,9 +46,7 @@
 import numeral from "numeral";
 export default {
   name: "default",
-  beforeCreate() {
-    this.$isauth();
-  },
+
   created() {
     this.$store.dispatch("customer/getAllCustomersRealTime");
     this.$store.dispatch("product/getAllProductsRealTime");
@@ -61,8 +59,8 @@ export default {
       var total = numeral(balance).format("0,0");
       return total;
     },
-    islogged() {
-      return this.$store.getters["auth2/GET_LOGGEDIN"];
+    user() {
+      return this.$store.getters["auth2/GET_USER"];
     },
     admin() {
       return this.$store.getters["auth2/GET_İSADMİN"];
@@ -71,11 +69,6 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("auth2/signout");
-    },
-  },
-  watch: {
-    $router() {
-      this.$isauth();
     },
   },
 };
