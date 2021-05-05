@@ -8,7 +8,7 @@ export default {
     fallback: true
   },
   head: {
-    title: "customer-managment",
+    title: "DM",
     htmlAttrs: {
       lang: "en"
     },
