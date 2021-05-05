@@ -55,7 +55,7 @@ export default {
             style: "header",
             alignment: "center",
           },
-            {
+          {
             text: [{ text: `TEL1: `, bold: "true" }, `0224 250 8935`],
             style: "info",
           },
@@ -78,7 +78,7 @@ export default {
             ],
             style: "ibanno",
           },
-           {
+          {
             text: [
               { text: "ADRES: ", bold: "true" },
               `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`,
@@ -142,8 +142,8 @@ export default {
             text: `Toplam: ${this.customer.final_sales_amount} TL`,
             style: "productTotal",
           },
-         
-        /*   {
+
+          /*   {
             text: [{ text: `TEL1: `, bold: "true" }, `0224 250 8935`],
             style: "info",
           },
@@ -209,7 +209,7 @@ export default {
             bold: false,
             fontSize: 8,
             color: "black",
-            alignment: 'right'
+            alignment: "right",
           },
 
           adres: {
@@ -217,32 +217,30 @@ export default {
             fontSize: 8,
             margin: [0, 0, 0, 5],
             color: "black",
-            alignment: 'right'
+            alignment: "right",
           },
           iban: {
             bold: false,
             fontSize: 8,
             margin: [0, 5, 0, 0],
             color: "black",
-            alignment: 'right'
+            alignment: "right",
           },
           ibanno: {
             bold: false,
             fontSize: 8,
             margin: [0, 0, 0, 0],
             color: "black",
-            alignment: 'right'
+            alignment: "right",
           },
         },
       };
 
-      /*   pdfMake
+      pdfMake
         .createPdf(docDefinition)
         .download(
           `${moment().locale("tr").format("LL")}-${this.customer.company_name}`
-        ); */
-
-      pdfMake.createPdf(docDefinition).open();
+        );
     },
   },
 };

@@ -48,8 +48,8 @@ export default {
   name: "default",
 
   created() {
-    this.$store.dispatch("customer/getAllCustomersRealTime");
-    this.$store.dispatch("product/getAllProductsRealTime");
+     this.$store.dispatch("customer/getAllCustomersRealTime");
+    this.$store.dispatch("product/getAllProductsRealTime"); 
   },
 
   computed: {

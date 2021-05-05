@@ -29,7 +29,7 @@ export const getters = {
 
 export const actions = {
   onAuthStateChangedAction: (ctx, { authUser, claims }) => {
-    console.log(authUser);
+    
     if (!authUser) {
       ctx.commit("SET_ADMİN", false);
       ctx.commit("SET_USER", null);
@@ -44,6 +44,7 @@ export const actions = {
       this.$fire.auth
         .signInWithEmailAndPassword(userlogin.email, userlogin.password)
         .then(() => {
+          
           this.$router.push("/");
           resolve("ok");
         })

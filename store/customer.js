@@ -35,26 +35,18 @@ export const getters = {
 };
 
 export const actions = {
-  /* async updateBacalance(contex, data) {
-    const query = await this.$fire.firestore
-      .collection("customers")
-      .where("id", "==", `${data.id}`);
-  }, */
+
 
   async getAllCustomersRealTime(context) {
     this.$fire.firestore.collection("customers").onSnapshot(querySnapshot => {
       querySnapshot.docChanges().forEach(change => {
         if (change.type === "added") {
-          const source = change.doc.metadata.hasPendingWrites
-            ? "Local"
-            : "Server";
 
-          if (source === "Server") {
             context.commit("SET_CUSTOMERS", {
               ...change.doc.data(),
               id: change.doc.id
             });
-          }
+
         }
         if (change.type === "modified") {
           context.commit("UPDATE_CUSTOMER", {
@@ -151,10 +143,10 @@ export const actions = {
           adress: updatedCustomer.adress
         });
 
-        console.log("okk");
+       
         resolve("ok");
       } catch (error) {
-        console.log(error);
+        
         reject(error);
       }
     });

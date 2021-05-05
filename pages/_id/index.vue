@@ -100,7 +100,7 @@ export default {
       )[0];
 
       this.$store.commit("customer/SET_CUSTOMER", customer);
-      console.log(this.$store);
+      
       return new Array(customer);
     },
   },
