@@ -12,7 +12,7 @@
               icon="calculator"
               :validation-message="errormessage"
               v-model="payment_amount"
-              style="max-width: 15rem;min-width:12rem"
+              style="max-width: 15rem; min-width: 12rem"
             >
             </b-input>
 
@@ -51,7 +51,7 @@
               v-model="productToAdd.count"
               :controls="false"
               validation-message="Lütfen doğru formatta numara girin"
-              style="max-width: 30rem; width:14rem"
+              style="max-width: 30rem; width: 14rem"
             >
             </b-numberinput>
           </b-field>
@@ -283,7 +283,10 @@ export default {
           const loadingComponent = this.$buefy.loading.open();
 
           try {
-            await this.$store.dispatch("product/decreaseProduct", this.data);
+            await this.$store.dispatch("product/decreaseProduct", {
+              products: this.data,
+              company: this.customer.company_name,
+            });
 
             await this.$store.dispatch("customer/sell", {
               id: this.customer.id,

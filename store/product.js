@@ -1,10 +1,23 @@
 export const state = () => ({
-  products: []
+  products: [],
+  history: [],
+  currnetProductName: ""
 });
 
 export const mutations = {
   SET_PRODUCTS(state, product) {
     state.products.push(product);
+  },
+  SET_PRODUCT_HİSTORY(state, history) {
+    state.history.push(history);
+  },
+  CLEAN_PRODUCT_HİSTORY(state) {
+    state.history = [];
+    state.currnetProductName = "";
+  },
+
+  SET_CURRENT_PRODUCT_NAME(state, name) {
+    state.currnetProductName = name;
   },
 
   UPDATE_PRODUCT(state, product) {
@@ -23,6 +36,12 @@ export const mutations = {
 export const getters = {
   GET_PRODUCTS(state) {
     return state.products;
+  },
+  GET_PRODUCT_HİSTORY(state) {
+    return state.history;
+  },
+  GET_PRODUCT_NAME(state) {
+    return state.currnetProductName;
   }
 };
 
@@ -63,8 +82,36 @@ export const actions = {
       });
     });
   },
-  increaseProduct(context, { count, id }) {},
-  decreaseProduct(context, products) {
+  getProductHistory(context, id) {
+    context.commit("CLEAN_PRODUCT_HİSTORY");
+    this.$fire.firestore
+      .collection("products")
+      .doc(id)
+      .get()
+      .then(doc => context.commit("SET_CURRENT_PRODUCT_NAME", doc.data().name));
+
+    this.$fire.firestore
+      .collection("products")
+      .doc(id)
+      .collection("history")
+      .onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          let source = querySnapshot.metadata.hasPendingWrites
+            ? "Local"
+            : "Server";
+          if (source === "Server") {
+            if (change.type === "added") {
+              context.commit("SET_PRODUCT_HİSTORY", {
+                ...change.doc.data(),
+                id: change.doc.id
+              });
+            }
+          }
+        });
+      });
+  },
+  decreaseProduct(context, { products, company }) {
+    console.log(products, company);
     return new Promise(async (resolve, reject) => {
       products.map(async el => {
         let id = el.product.id;
@@ -80,6 +127,17 @@ export const actions = {
           await productRef.update({
             stock: finalSotck
           });
+
+          let history = {
+            id: id,
+            updateCount: count,
+            remaingStock: finalSotck,
+            company: company,
+            type: "sold"
+          };
+
+          await context.dispatch("updateProductHistory", history);
+
           resolve("ok");
         } catch (error) {
           reject(error);
@@ -87,22 +145,31 @@ export const actions = {
       });
     });
   },
-  updateProduct(contect, product) {
+  updateProduct(context, product) {
     return new Promise(async (resolve, reject) => {
       let productRef = this.$fire.firestore
         .collection("products")
         .doc(product.id);
 
-      productRef
-        .update({
+      try {
+        await productRef.update({
           stock: parseInt(product.newStock)
-        })
-        .then(() => {
-          resolve("ok");
-        })
-        .catch(() => {
-          reject("error");
         });
+
+        let history = {
+          id: product.id,
+          updateCount: product.addedStock,
+          remaingStock: product.newStock,
+          company: "DM",
+          type: "added"
+        };
+
+        await context.dispatch("updateProductHistory", history);
+
+        resolve("ok");
+      } catch (error) {
+        reject(error);
+      }
     });
   },
   removeProduct(context, id) {
@@ -116,6 +183,34 @@ export const actions = {
         })
         .catch(() => {
           reject("err");
+        });
+    });
+  },
+  updateProductHistory(
+    context,
+    { id, updateCount, remaingStock, company, type }
+  ) {
+    return new Promise(async (resolve, reject) => {
+      let historyRef = this.$fire.firestore
+        .collection("products")
+        .doc(id)
+        .collection("history");
+
+      historyRef
+        .add({
+          count: updateCount,
+          company: company,
+          type: type,
+          remaingStock: remaingStock,
+          updateDate: Date.now()
+        })
+        .then(() => {
+          console.log("ok");
+          resolve("ok");
+        })
+        .catch(err => {
+          console.log(err);
+          reject("error");
         });
     });
   }
