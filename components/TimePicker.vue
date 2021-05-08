@@ -4,7 +4,7 @@
       class="is-flex is-justify-content-space-around is-align-items-flex-end"
       style="max-width: 24rem"
     >
-      <b-field style="width: 6.5rem" class="mb-0" label="Başlangıç">
+      <b-field style="min-width: 8rem" class="mb-0" label="Başlangıç">
         <b-datepicker
           v-model="start"
           :locale="locale"
@@ -13,7 +13,7 @@
         >
         </b-datepicker>
       </b-field>
-      <b-field class="mb-0" style="width: 6.5rem" label="Bitiş">
+      <b-field class="mb-0" style="min-width: 8rem" label="Bitiş">
         <b-datepicker
           v-model="end"
           :locale="locale"
