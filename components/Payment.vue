@@ -246,6 +246,7 @@ export default {
               id: this.customer.id,
               payment_amount: this.payment_amount,
               balance: this.customer.current_balance,
+              company_name: this.customer.company_name,
             });
             loadingComponent.close();
             this.$buefy.toast.open({
@@ -293,6 +294,7 @@ export default {
               sales_amount: this.sales_amount,
               balance: this.customer.current_balance,
               final_shopping: this.data,
+              company_name: this.customer.company_name,
             });
 
             loadingComponent.close();

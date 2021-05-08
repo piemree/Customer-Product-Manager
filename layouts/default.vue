@@ -23,6 +23,13 @@
         >
           Ürün Yönetim
         </b-navbar-item>
+        <b-navbar-item
+          v-if="admin"
+          tag="router-link"
+          :to="{ path: '/admin/alisveris-gecmisi' }"
+        >
+          Alışveriş Takip
+        </b-navbar-item>
       </template>
 
       <template #end>
@@ -48,8 +55,9 @@ export default {
   name: "default",
 
   created() {
-     this.$store.dispatch("customer/getAllCustomersRealTime");
-    this.$store.dispatch("product/getAllProductsRealTime"); 
+    this.$store.dispatch("customer/getAllCustomersRealTime");
+    this.$store.dispatch("customer/getShopingHistory");
+    this.$store.dispatch("product/getAllProductsRealTime");
   },
 
   computed: {

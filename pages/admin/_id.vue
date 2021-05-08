@@ -43,12 +43,6 @@ export default {
   },
   computed: {
     history() {
-      /*  let history = new Array(
-        ...this.$store.getters["product/GET_PRODUCT_HİSTORY"]
-      );
-      return history.sort(function (a, b) {
-  return b.updateDate - a.updateDate;
-}); */
       return this.$store.getters["product/GET_PRODUCT_HİSTORY"];
     },
     productName() {

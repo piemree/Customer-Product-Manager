@@ -1,6 +1,7 @@
 export const state = () => ({
   customers: [],
   products: [],
+  history: [],
   customer: {}
 });
 
@@ -11,6 +12,9 @@ export const mutations = {
   SET_CUSTOMER(state, customer) {
     state.customer = customer;
   },
+  SET_CUSTOMERS_HİSTORY(state, history) {
+    state.history.push(history);
+  },
   UPDATE_CUSTOMER(state, data) {
     let index = state.customers.findIndex(customer => customer.id === data.id);
     this._vm.$set(state.customers, index, data);
@@ -20,6 +24,9 @@ export const mutations = {
 export const getters = {
   GET_CUSTOMERS(state) {
     return state.customers;
+  },
+  GET_CUSTOMERS_HİSTORY(state) {
+    return state.history;
   },
   GET_CURRENT_CUSTOMER(state) {
     return state.customer;
@@ -35,18 +42,14 @@ export const getters = {
 };
 
 export const actions = {
-
-
   async getAllCustomersRealTime(context) {
     this.$fire.firestore.collection("customers").onSnapshot(querySnapshot => {
       querySnapshot.docChanges().forEach(change => {
         if (change.type === "added") {
-
-            context.commit("SET_CUSTOMERS", {
-              ...change.doc.data(),
-              id: change.doc.id
-            });
-
+          context.commit("SET_CUSTOMERS", {
+            ...change.doc.data(),
+            id: change.doc.id
+          });
         }
         if (change.type === "modified") {
           context.commit("UPDATE_CUSTOMER", {
@@ -90,19 +93,28 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
-    return new Promise((resolve, reject) => {
-      ref
-        .update({
+    let currentDate = Date.now();
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        await ref.update({
           current_balance: new_balance,
           final_payment_amount: parseInt(customer.payment_amount),
           final_payment_date: Date.now()
-        })
-        .then(ok => {
-          resolve("ok");
-        })
-        .catch(err => {
-          reject("error");
         });
+
+        let shopping = {
+          quantity: customer.payment_amount,
+          details: [],
+          company: customer.company_name,
+          date: currentDate
+        };
+
+        await context.dispatch("saveShopping", shopping);
+        resolve("ok");
+      } catch (error) {
+        reject("err");
+      }
     });
   },
 
@@ -112,14 +124,24 @@ export const actions = {
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
+    let currentDate = Date.now();
     return new Promise(async (resolve, reject) => {
       try {
         await ref.update({
           current_balance: new_balance,
           final_sales_amount: customer.sales_amount,
           final_shopping_info: customer.final_shopping,
-          final_sales_date: Date.now()
+          final_sales_date: currentDate
         });
+
+        let shopping = {
+          quantity: customer.sales_amount,
+          details: customer.final_shopping,
+          company: customer.company_name,
+          date: currentDate
+        };
+
+        await context.dispatch("saveShopping", shopping);
         resolve("ok");
       } catch (error) {
         reject(error);
@@ -143,12 +165,47 @@ export const actions = {
           adress: updatedCustomer.adress
         });
 
-       
         resolve("ok");
       } catch (error) {
-        
         reject(error);
       }
     });
+  },
+
+  async saveShopping(context, { quantity, details, company, date }) {
+    let type = details.length > 0 ? "satış" : "tahsilat";
+
+    return new Promise(async (resolve, reject) => {
+      let ref = this.$fire.firestore.collection("history");
+
+      try {
+        await ref.add({
+          quantity,
+          details,
+          company,
+          date,
+          type
+        });
+        resolve("ok");
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  async getShopingHistory(context) {
+    this.$fire.firestore
+      .collection("history")
+      .orderBy("date")
+      .limitToLast(100)
+      .onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            context.commit("SET_CUSTOMERS_HİSTORY", {
+              ...change.doc.data(),
+              id: change.doc.id
+            });
+          }
+        });
+      });
   }
 };
