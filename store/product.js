@@ -93,7 +93,7 @@ export const actions = {
     this.$fire.firestore
       .collection("products")
       .doc(id)
-      .collection("history")
+      .collection("history").orderBy('updateDate').limitToLast(100)
       .onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           let source = querySnapshot.metadata.hasPendingWrites

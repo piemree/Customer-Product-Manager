@@ -19,8 +19,14 @@
       <b-table-column field="remaingStock" label="Kalan" v-slot="props">
         {{ props.row.remaingStock }}
       </b-table-column>
-      <b-table-column field="updateDate" label="Tarih" v-slot="props">
-        {{ $convert(props.row.updateDate)  }}
+      <b-table-column
+        width="150"
+        field="updateDate"
+        label="Tarih"
+        sortable
+        v-slot="props"
+      >
+        {{ $convert(props.row.updateDate) }}
       </b-table-column>
     </b-table>
   </section>
@@ -28,7 +34,7 @@
 
 <script>
 export default {
-    middleware(ctx) {
+  middleware(ctx) {
     if (!ctx.$fire.auth.currentUser) {
       return ctx.redirect("/auth/login");
     } else if (!ctx.store.getters["auth2/GET_İSADMİN"]) {
@@ -37,12 +43,13 @@ export default {
   },
   computed: {
     history() {
-      let history = new Array(
+      /*  let history = new Array(
         ...this.$store.getters["product/GET_PRODUCT_HİSTORY"]
       );
       return history.sort(function (a, b) {
   return b.updateDate - a.updateDate;
-});
+}); */
+      return this.$store.getters["product/GET_PRODUCT_HİSTORY"];
     },
     productName() {
       return this.$store.getters["product/GET_PRODUCT_NAME"];
