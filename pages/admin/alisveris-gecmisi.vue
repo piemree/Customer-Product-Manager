@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <h3 class="title">Satış/Tahsilat Geçmişi</h3>
-
+      <TimePicker/>
     <b-table
       :data="history"
       :paginated="true"
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import TimePicker from '@/components/TimePicker'
 export default {
   middleware(ctx) {
     if (!ctx.$fire.auth.currentUser) {
@@ -53,6 +54,9 @@ export default {
     } else if (!ctx.store.getters["auth2/GET_İSADMİN"]) {
       return ctx.redirect("/");
     }
+  },
+  components:{
+    TimePicker
   },
   methods: {
     showDetails(details) {

@@ -18,6 +18,9 @@ export const mutations = {
   UPDATE_CUSTOMER(state, data) {
     let index = state.customers.findIndex(customer => customer.id === data.id);
     this._vm.$set(state.customers, index, data);
+  },
+  CLEAR_HİSTORY(state){
+    state.history=[]
   }
 };
 
@@ -192,11 +195,26 @@ export const actions = {
       }
     });
   },
-  async getShopingHistory(context) {
-    this.$fire.firestore
+  async getShopingHistory(context,{start,end}) {
+  /*   this.$fire.firestore
       .collection("history")
       .orderBy("date")
       .limitToLast(100)
+      .onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            context.commit("SET_CUSTOMERS_HİSTORY", {
+              ...change.doc.data(),
+              id: change.doc.id
+            });
+          }
+        });
+      }); */
+
+      context.commit("CLEAR_HİSTORY")
+
+      this.$fire.firestore
+      .collection("history").where("date",">",start).where("date","<",end)
       .onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           if (change.type === "added") {

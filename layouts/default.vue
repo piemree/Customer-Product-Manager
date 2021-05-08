@@ -42,7 +42,13 @@
         </b-navbar-item>
       </template>
     </b-navbar>
-    <b-button v-if="user" style="position:absolute;z-index:1;right:1rem" class="is-small" @click="$router.go(-1)">Geri</b-button>
+    <b-button
+      v-if="user"
+      style="position: absolute; z-index: 1; right: 1rem"
+      class="is-small"
+      @click="$router.go(-1)"
+      >Geri</b-button
+    >
     <div class="container">
       <nuxt />
     </div>
@@ -55,8 +61,12 @@ export default {
   name: "default",
 
   created() {
+    let start = Date.now() -  24 * 60 * 60 * 1000;
     this.$store.dispatch("customer/getAllCustomersRealTime");
-    this.$store.dispatch("customer/getShopingHistory");
+    this.$store.dispatch("customer/getShopingHistory", {
+      start: start,
+      end: Date.now(),
+    });
     this.$store.dispatch("product/getAllProductsRealTime");
   },
 
