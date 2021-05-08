@@ -42,7 +42,7 @@
         </b-navbar-item>
       </template>
     </b-navbar>
-
+    <b-button style="position:absolute;z-index:100;left:1rem" class="is-small" @click="$router.go(-1)">Geri</b-button>
     <div class="container">
       <nuxt />
     </div>

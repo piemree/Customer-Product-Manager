@@ -14,7 +14,7 @@
         {{ props.row.company }}
       </b-table-column>
       <b-table-column field="count" label="Adet" v-slot="props">
-        {{ props.row.count }}
+        {{ props.row.type === "sold" ? "-" : "+" }}{{ props.row.count }}
       </b-table-column>
       <b-table-column field="remaingStock" label="Kalan" v-slot="props">
         {{ props.row.remaingStock }}

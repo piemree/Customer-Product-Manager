@@ -27,14 +27,14 @@
           label="Son tahsilat miktarı"
           v-slot="props"
         >
-          {{ props.row.final_payment_amount }}
+          {{ props.row.final_payment_amount }} TL
         </b-table-column>
         <b-table-column
           field="final_sales_amount"
           label="Son satış miktarı"
           v-slot="props"
         >
-          {{ props.row.final_sales_amount }}
+          {{ props.row.final_sales_amount }} TL
         </b-table-column>
         <b-table-column
           field="final_sales_date"
@@ -44,7 +44,7 @@
           {{ $convert(props.row.final_sales_date) }}
         </b-table-column>
         <b-table-column field="current_balance" label="Bakiye" v-slot="props">
-          {{ props.row.current_balance }}
+          {{ props.row.current_balance }} TL
         </b-table-column>
 
         <b-table-column>
