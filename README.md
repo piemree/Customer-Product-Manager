@@ -1,3 +1,4 @@
+
 # customer-product-managment quick start 
 
 ## Initialize firebase for localhost
@@ -57,6 +58,8 @@ const serviceAccount ={
   "client_email": "********",
   "client_id": "************",
   "auth_uri": "***************",
+![pdfwiev](https://user-images.githubusercontent.com/75936754/117746646-6ac0a700-b215-11eb-8ebe-c9080b6d2468.jpg)
+![pdfwiev](https://user-images.githubusercontent.com/75936754/117746685-7a3ff000-b215-11eb-8328-89faccd0a635.jpg)
   "token_uri": "****************",
   "auth_provider_x509_cert_url": "*****************",
   "client_x509_cert_url": "**************"
@@ -90,7 +93,7 @@ If you want to shopping a spesific customer .you must use this page
 
 Pdfs looks like this
 
-![Pdf](https://user-images.githubusercontent.com/75936754/117593371-2c0eec00-b144-11eb-98e7-b9807ac92b69.png)
+![pdfwiev](https://user-images.githubusercontent.com/75936754/117746579-5086c900-b215-11eb-90ba-d34daabb0d52.jpg)
 
 
 There is a all products list.You can manage products.
