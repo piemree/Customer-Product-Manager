@@ -30,7 +30,7 @@ and project will work for localhost without admin.
 
 ```bash
 # create new folder
-$ mkdir setAdin
+$ mkdir setAdmin
 
 # go inside
 $ cd setAdmin
