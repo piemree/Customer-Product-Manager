@@ -58,8 +58,6 @@ const serviceAccount ={
   "client_email": "********",
   "client_id": "************",
   "auth_uri": "***************",
-![pdfwiev](https://user-images.githubusercontent.com/75936754/117746646-6ac0a700-b215-11eb-8ebe-c9080b6d2468.jpg)
-![pdfwiev](https://user-images.githubusercontent.com/75936754/117746685-7a3ff000-b215-11eb-8328-89faccd0a635.jpg)
   "token_uri": "****************",
   "auth_provider_x509_cert_url": "*****************",
   "client_x509_cert_url": "**************"
