@@ -31,7 +31,13 @@
       <b-tab-item label="SATIŞ">
         <section class="mt-5 mb-5" style="">
           <b-field label="Ürün ">
-            <b-select
+                <v-select
+            style="width:15rem"
+              v-model="productToAdd.product"
+              label="name"
+              :options="products"
+            ></v-select>
+          <!--   <b-select
               v-model="productToAdd.product"
               placeholder="Select a name"
             >
@@ -42,7 +48,7 @@
               >
                 {{ product.name }}
               </option>
-            </b-select>
+            </b-select> -->
           </b-field>
           <b-field label="Adet">
             <b-numberinput
@@ -116,7 +122,12 @@
   </section>
 </template>
 <script>
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 export default {
+   components: {
+    vSelect
+  },
   data() {
     return {
       activeTab: 0,
