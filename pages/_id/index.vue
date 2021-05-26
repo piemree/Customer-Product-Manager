@@ -77,6 +77,7 @@ import Payment from "@/components/Payment";
 import PdfButton from "@/components/PdfButton";
 
 export default {
+  //middleware
   middleware(ctx) {
     if (!ctx.$fire.auth.currentUser) {
       ctx.redirect("/auth/login");
