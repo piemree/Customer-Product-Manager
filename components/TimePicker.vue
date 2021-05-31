@@ -35,7 +35,7 @@
 export default {
   data() {
     return {
-      start: new Date(),
+      start: new Date(Date.now()-1000*60*60*24),
       end: new Date(),
       locale: "tr-TR",
     };

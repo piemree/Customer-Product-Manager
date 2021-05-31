@@ -37,18 +37,6 @@
               label="name"
               :options="products"
             ></v-select>
-          <!--   <b-select
-              v-model="productToAdd.product"
-              placeholder="Select a name"
-            >
-              <option
-                v-for="product in products"
-                :value="{ id: product.id, name: product.name }"
-                :key="product.id"
-              >
-                {{ product.name }}
-              </option>
-            </b-select> -->
           </b-field>
           <b-field label="Adet">
             <b-numberinput
@@ -86,7 +74,28 @@
             />
           </b-field>
 
-          <b-table :data="data" :columns="columns" :mobile-cards="false">
+           <b-table :data="data" field="" :mobile-cards="false">
+            <b-table-column field="product.name" label="Ürün" v-slot="props">
+              {{ props.row.product.name }}
+            </b-table-column>
+            <b-table-column field="count" label="Adet" v-slot="props">
+              {{ props.row.count }}
+            </b-table-column>
+            <b-table-column field="price" label="Fiyat" v-slot="props">
+              {{ props.row.price }}
+            </b-table-column>
+            <b-table-column field="total" label="Ara toplam" v-slot="props">
+              {{ props.row.total }}
+            </b-table-column>
+            <b-table-column v-slot="props">
+              <b-button
+                style="height:1.5rem"
+                class="m-0 p-2"
+                @click="data.splice(props.row.index,1)"
+              >
+                <b-icon style="color:red;cursor:pointer" icon="close"></b-icon>
+              </b-button>
+            </b-table-column>
           </b-table>
           <b-field class="mt-5"
             ><span> <b>Toplam</b>: {{ totalTablePrice }}</span></b-field
@@ -145,25 +154,6 @@ export default {
         total: null,
       },
       data: [],
-
-      columns: [
-        {
-          field: "product.name",
-          label: "Ürün",
-        },
-        {
-          field: "count",
-          label: "Adet",
-        },
-        {
-          field: "price",
-          label: "Fiyat",
-        },
-        {
-          field: "total",
-          label: "Ara toplam",
-        },
-      ],
     };
   },
   props: {
@@ -298,7 +288,7 @@ export default {
             await this.$store.dispatch("product/decreaseProduct", {
               products: this.data,
               company: this.customer.company_name,
-            });
+            }); 
 
             await this.$store.dispatch("customer/sell", {
               id: this.customer.id,
@@ -313,11 +303,14 @@ export default {
               message: "İşlem başarıyla tamamlandı",
               type: "is-success",
             });
+            this.data = [];
+            this.sales_amount = "";
           } catch (error) {
+            console.log(error.msg)
             loadingComponent.close();
             this.$buefy.dialog.alert({
-              title: "HATA!!!",
-              message: "BİRŞEYLER TERS GİTTİ",
+               title: error.title || "HATA!!!",
+              message: error.msg || "BİRŞEYLER TERS GİTTİ",
               type: "is-danger",
               hasIcon: false,
               icon: "exclamation",
@@ -326,8 +319,7 @@ export default {
               ariaModal: true,
             });
           }
-          this.sales_amount = "";
-          this.data = [];
+       
         },
       });
     },

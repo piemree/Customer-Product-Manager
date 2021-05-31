@@ -1,7 +1,8 @@
 export const state = () => ({
   products: [],
   history: [],
-  currnetProductName: ""
+  currnetProductName: "",
+  areCountsWrong: []
 });
 
 export const mutations = {
@@ -30,6 +31,9 @@ export const mutations = {
     let index = state.products.findIndex(product => product.id === id);
 
     state.products.splice(index, 1);
+  },
+  ARE_COUNTS_WRONG(state, products) {
+    state.areCountsWrong = [...products];
   }
 };
 
@@ -42,6 +46,9 @@ export const getters = {
   },
   GET_PRODUCT_NAME(state) {
     return state.currnetProductName;
+  },
+  GET_ARE_COUNTS_WRONG(state) {
+    return state.areCountsWrong;
   }
 };
 
@@ -93,7 +100,9 @@ export const actions = {
     this.$fire.firestore
       .collection("products")
       .doc(id)
-      .collection("history").orderBy('updateDate').limitToLast(100)
+      .collection("history")
+      .orderBy("updateDate")
+      .limitToLast(100)
       .onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           let source = querySnapshot.metadata.hasPendingWrites
@@ -111,39 +120,69 @@ export const actions = {
       });
   },
   decreaseProduct(context, { products, company }) {
-    console.log(products, company);
-    return new Promise(async (resolve, reject) => {
-      products.map(async el => {
-        let id = el.product.id;
-        let count = el.count;
-        let finalSotck;
-        let productRef = this.$fire.firestore.collection("products").doc(id);
+    context.dispatch("productCountControl", products);
+    const wrongProducts = context.getters.GET_ARE_COUNTS_WRONG;
 
-        try {
-          let prod = await productRef.get();
+    if (wrongProducts.length > 0) {
+      return new Promise(async (resolve, reject) =>
+        reject({
+          title: "YETERSİZ STOK",
+          msg: `${wrongProducts
+            .map(prod => {
+              return `<p><b>ÜRÜN:<span class="has-text-danger">${prod.name}</span> STOK:<span class="has-text-danger">${prod.stock}</span></b></p><hr class="my-2"/>`;
+            })
+            .join("")}`
+        })
+      );
+    } 
+     
+      return new Promise(async (resolve, reject) => {
+       if(products.length<=0) return  reject({ msg: "BİRŞEYLER TERS GİTTİ" });
+        products.map(async el => {
+          console.log("entered else block")
+          let id = el.product.id;
+          let count = el.count;
+          let finalSotck;
+          let productRef = this.$fire.firestore.collection("products").doc(id);
+            console.log("here");
+          try {
+            let prod = await productRef.get();
 
-          finalSotck = prod.data().stock - count;
+            finalSotck = prod.data().stock - count;
 
-          await productRef.update({
-            stock: finalSotck
-          });
+            await productRef.update({
+              stock: finalSotck
+            });
 
-          let history = {
-            id: id,
-            updateCount: count,
-            remaingStock: finalSotck,
-            company: company,
-            type: "sold"
-          };
+            let history = {
+              id: id,
+              updateCount: count,
+              remaingStock: finalSotck,
+              company: company,
+              type: "sold"
+            };
 
-          await context.dispatch("updateProductHistory", history);
+            await context.dispatch("updateProductHistory", history);
 
-          resolve("ok");
-        } catch (error) {
-          reject(error);
-        }
+            resolve("ok");
+          } catch (error) {
+            reject({ msg: "BİRŞEYLER TERS GİTTİ" });
+          }
+        });
       });
-    });
+    
+  },
+  productCountControl({ commit, getters }, products) {
+    commit("ARE_COUNTS_WRONG", []);
+    const wichProds = products
+      .map(product => {
+        return getters.GET_PRODUCTS.find(el =>
+          product.product.id === el.id ? product.count > el.stock : undefined
+        );
+      })
+      .filter(el => el !== undefined);
+
+    commit("ARE_COUNTS_WRONG", wichProds);
   },
   updateProduct(context, product) {
     return new Promise(async (resolve, reject) => {

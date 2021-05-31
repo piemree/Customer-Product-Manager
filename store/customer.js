@@ -55,10 +55,13 @@ export const actions = {
           });
         }
         if (change.type === "modified") {
+
           context.commit("UPDATE_CUSTOMER", {
             ...change.doc.data(),
             id: change.doc.id
           });
+
+
         }
         if (change.type === "removed") {
         }
@@ -196,21 +199,7 @@ export const actions = {
     });
   },
   async getShopingHistory(context,{start,end}) {
-  /*   this.$fire.firestore
-      .collection("history")
-      .orderBy("date")
-      .limitToLast(100)
-      .onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(change => {
-          if (change.type === "added") {
-            context.commit("SET_CUSTOMERS_HİSTORY", {
-              ...change.doc.data(),
-              id: change.doc.id
-            });
-          }
-        });
-      }); */
-
+ 
       context.commit("CLEAR_HİSTORY")
 
       this.$fire.firestore
@@ -218,11 +207,12 @@ export const actions = {
       .onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           if (change.type === "added") {
+           
             context.commit("SET_CUSTOMERS_HİSTORY", {
               ...change.doc.data(),
               id: change.doc.id
             });
-          }
+          } 
         });
       });
   }

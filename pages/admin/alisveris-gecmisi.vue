@@ -75,7 +75,7 @@ export default {
                     </p>
                     <hr class="my-2"/>
             `;
-        })} `,
+        }).join("")} `,
         confirmText: "OK",
       });
     },
