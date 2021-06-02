@@ -48,17 +48,20 @@
               style="max-width: 30rem; width: 14rem"
             >
             </b-numberinput>
+            
           </b-field>
           <b-field label="Fiyat">
-            <b-numberinput
+            <!-- <b-numberinput
               type="number"
               min="0"
               v-model="productToAdd.price"
               :controls="false"
-              validation-message="Lütfen doğru formatta numara girin"
+              :validation-message="false"
               style="max-width: 10rem"
+              
             >
-            </b-numberinput>
+            </b-numberinput> -->
+             <b-numberinput :controls="false"  min="0" step="0.01"  v-model="productToAdd.price" style="max-width: 30rem; width: 14rem"></b-numberinput>
             <b-button @click="add" type="is-success" label="Ekle" />
           </b-field>
         </section>
@@ -176,7 +179,7 @@ export default {
   watch: {
     data() {
       let total = 0;
-      this.data.map((el) => (total += parseInt(el.total)));
+      this.data.map((el) => (total += parseFloat(el.total)));
       this.totalTablePrice = total;
 
       this.totalTablePrice === 0
@@ -211,7 +214,7 @@ export default {
   methods: {
     add() {
       this.productToAdd.total =
-        parseInt(this.productToAdd.count) * parseInt(this.productToAdd.price);
+        parseInt(this.productToAdd.count) * parseFloat(this.productToAdd.price);
 
       if (
         this.productToAdd.count != (null || "" || 0) &&
