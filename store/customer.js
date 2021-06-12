@@ -19,8 +19,8 @@ export const mutations = {
     let index = state.customers.findIndex(customer => customer.id === data.id);
     this._vm.$set(state.customers, index, data);
   },
-  CLEAR_HİSTORY(state){
-    state.history=[]
+  CLEAR_HİSTORY(state) {
+    state.history = [];
   }
 };
 
@@ -55,13 +55,10 @@ export const actions = {
           });
         }
         if (change.type === "modified") {
-
           context.commit("UPDATE_CUSTOMER", {
             ...change.doc.data(),
             id: change.doc.id
           });
-
-
         }
         if (change.type === "removed") {
         }
@@ -178,9 +175,9 @@ export const actions = {
     });
   },
 
-  async saveShopping(context, { quantity, details, company, date }) {
+  async saveShopping({ rootState }, { quantity, details, company, date }) {
     let type = details.length > 0 ? "satış" : "tahsilat";
-
+    let seller = rootState.auth2.user.split("@")[0];
     return new Promise(async (resolve, reject) => {
       let ref = this.$fire.firestore.collection("history");
 
@@ -190,6 +187,7 @@ export const actions = {
           details,
           company,
           date,
+          seller,
           type
         });
         resolve("ok");
@@ -198,21 +196,21 @@ export const actions = {
       }
     });
   },
-  async getShopingHistory(context,{start,end}) {
- 
-      context.commit("CLEAR_HİSTORY")
+  async getShopingHistory(context, { start, end }) {
+    context.commit("CLEAR_HİSTORY");
 
-      this.$fire.firestore
-      .collection("history").where("date",">",start).where("date","<",end)
+    this.$fire.firestore
+      .collection("history")
+      .where("date", ">", start)
+      .where("date", "<", end)
       .onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
           if (change.type === "added") {
-           
             context.commit("SET_CUSTOMERS_HİSTORY", {
               ...change.doc.data(),
               id: change.doc.id
             });
-          } 
+          }
         });
       });
   }

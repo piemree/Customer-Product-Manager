@@ -2,14 +2,14 @@
   <div>
     <b-navbar v-if="user">
       <template #brand>
-        <b-navbar-item tag="router-link" :to="{ path: '/' }">
-          <h1>DMGARAGE</h1>
-        </b-navbar-item>
+         <b-navbar-item tag="router-link" :to="{ path: '/' }"
+          >DM</b-navbar-item
+        >
         <b-navbar-item v-if="admin">
           <b>Total:</b><span>{{ totalBalance }} TL</span>
         </b-navbar-item>
-          <b-navbar-item >
-          <b>Günsonu:</b><span>{{ endOfDay }} TL</span>
+        <b-navbar-item>
+          <b>Tahsilat:</b><span>{{ endOfDay }} TL</span>
         </b-navbar-item>
       </template>
       <template #start>
@@ -64,11 +64,11 @@ export default {
   name: "default",
 
   created() {
-    let start = Date.now() -  48 * 60 * 60 * 1000;
+    let start = Date.now() - 48 * 60 * 60 * 1000;
     this.$store.dispatch("customer/getAllCustomersRealTime");
     this.$store.dispatch("customer/getShopingHistory", {
       start: start,
-      end: Date.now(),
+      end: Date.now()
     });
     this.$store.dispatch("product/getAllProductsRealTime");
   },
@@ -80,17 +80,17 @@ export default {
       var total = numeral(balance).format("0,0");
       return total;
     },
-    endOfDay(){
-      const today=new Date().getDate()
-         let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"]
+    endOfDay() {
+      const today = new Date().getDate();
+      let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
 
-      const todayShopping=  history.filter((el) => new Date(el.date).getDate()===today)
-      let allTotal=0
-      todayShopping.forEach((shopping) => shopping.details.forEach((el) => allTotal+=el.total))
+      const todayShopping = history.filter(
+        el => new Date(el.date).getDate() === today
+      );
+      let allTotal = 0;
+      todayShopping.forEach(shopping => (allTotal += parseFloat(shopping.quantity)));
 
-   // console.log(new Date(history[2].date).getDate())
-   // console.log(history[19].details[0].total);
-      //var total = numeral(balance).format("0,0");
+   
       return allTotal;
     },
     user() {
@@ -98,13 +98,12 @@ export default {
     },
     admin() {
       return this.$store.getters["auth2/GET_İSADMİN"];
-    },
+    }
   },
   methods: {
     logout() {
       this.$store.dispatch("auth2/signout");
-    },
-  },
+    }
+  }
 };
 </script>
-

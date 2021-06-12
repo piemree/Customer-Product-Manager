@@ -49,7 +49,7 @@ export default {
       let docDefinition = {
         content: [
           {
-            text: "DM GARAGE MÜŞTERİ BİLGİLENDİRME FORMU",
+            text: "DM KİMYA MÜŞTERİ BİLGİLENDİRME FORMU",
             style: "header",
             alignment: "center"
           },

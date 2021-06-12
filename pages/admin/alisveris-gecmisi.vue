@@ -1,9 +1,20 @@
 <template>
   <section class="section">
     <h3 class="title">Satış/Tahsilat Geçmişi</h3>
-      <TimePicker/>
+    <TimePicker />
+    <div
+      @change="onChanged"
+      class="is-flex is-justify-content-space-evenly is-flex-wrap-wrap py-4"
+    >
+      <div style="min-width:5rem;" class="my-2">
+        <b>Yonetim:</b> <input ref="yonetim" type="checkbox" value="yonetim" />
+      </div>
+      <div style="min-width:5rem;" class="my-2">
+        <b>Dagıtım:</b> <input ref="dagitim" type="checkbox" value="dagitim" />
+      </div>
+    </div>
     <b-table
-      :data="history"
+      :data="checkeds.length === 0 ? history : filteredHistory"
       :paginated="true"
       :per-page="10"
       :narrowed="true"
@@ -15,38 +26,26 @@
       <b-table-column field="company" label="Firma" searchable v-slot="props">
         {{ props.row.company }}
       </b-table-column>
-      <b-table-column
-        width="80"
-        field="quantity"
-        label="Miktar"
-        sortable
-        v-slot="props"
-      >
+      <b-table-column field="quantity" label="Miktar" sortable v-slot="props">
         {{ props.row.quantity }} TL
       </b-table-column>
-      <b-table-column
-        width="150"
-        field="date"
-        label="Tarih"
-        sortable
-        v-slot="props"
-      >
+      <b-table-column field="date" label="Tarih" sortable v-slot="props">
         {{ $convert(props.row.date) }}
       </b-table-column>
-      <b-table-column width="30" v-slot="props" field="details">
-        <b-button
-          @click="showDetails(props.row.details)"
-          v-if="props.row.details.length > 0"
-          class="is-small"
-          >D</b-button
+      <b-table-column width="100" v-slot="props">
+        <p
+          @click="props.row.details.length > 0 ? showDetails(props.row.details) : false"
+          class="seller"
         >
+          {{ props.row.seller ? props.row.seller.toUpperCase() : "-" }}
+        </p>
       </b-table-column>
     </b-table>
   </section>
 </template>
 
 <script>
-import TimePicker from '@/components/TimePicker'
+import TimePicker from "@/components/TimePicker";
 export default {
   middleware(ctx) {
     if (!ctx.$fire.auth.currentUser) {
@@ -55,15 +54,34 @@ export default {
       return ctx.redirect("/");
     }
   },
-  components:{
+  components: {
     TimePicker
   },
+  data() {
+    return {
+      filteredHistory: [],
+      checkeds: []
+    };
+  },
   methods: {
+    onChanged() {
+      this.checkeds = [this.$refs.yonetim, this.$refs.dagitim].filter(el => {
+        if (el.checked) return true;
+      });
+
+      const filteredHistory = this.history.filter(row => {
+        return this.checkeds.some(input => {
+          return input.value === row.seller;
+        });
+      });
+      this.filteredHistory = [...filteredHistory];
+    },
     showDetails(details) {
       this.$buefy.dialog.alert({
         title: "Detay",
-        message: `${details.map((el) => {
-          return `
+        message: `${details
+          .map(el => {
+            return `
             <p>
                     <b>Ürün: </b>${el.product.name}
                     </p>
@@ -75,26 +93,36 @@ export default {
                     </p>
                     <hr class="my-2"/>
             `;
-        }).join("")} `,
-        confirmText: "OK",
+          })
+          .join("")} `,
+        confirmText: "OK"
       });
-    },
+    }
   },
   computed: {
     history() {
       return this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style>
-tr.is-success {
-  background: #48c774;
-  color: rgb(255, 255, 255);
+tr.is-success .seller {
+  background-color: rgb(98, 255, 98);
+
+  border-radius: 7px;
+  padding: 1px 5px;
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
 }
-tr.is-danger {
-  background: #f14668;
-  color: rgb(255, 255, 255);
+tr.is-danger .seller {
+  background-color: rgb(252, 107, 107);
+  border-radius: 7px;
+  padding: 1px 5px;
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
 }
 </style>
