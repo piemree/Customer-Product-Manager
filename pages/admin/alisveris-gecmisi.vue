@@ -35,7 +35,7 @@
       <b-table-column width="100" v-slot="props">
         <p
           @click="props.row.details.length > 0 ? showDetails(props.row.details) : false"
-          class="seller"
+          class="seller has-text-weight-semibold"
         >
           {{ props.row.seller ? props.row.seller.toUpperCase() : "-" }}
         </p>

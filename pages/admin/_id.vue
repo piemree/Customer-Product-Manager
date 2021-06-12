@@ -14,10 +14,10 @@
         {{ props.row.company }}
       </b-table-column>
       <b-table-column field="count" label="Adet" v-slot="props">
-        {{ props.row.type === "sold" ? "-" : "+" }}{{ props.row.count }}
+        <p class="state has-text-weight-semibold">{{ props.row.type === "sold" ? "-" : "+" }}{{ props.row.count }}</p>
       </b-table-column>
       <b-table-column field="remaingStock" label="Kalan" v-slot="props">
-        {{ props.row.remaingStock }}
+        <p class="state has-text-weight-semibold">{{ props.row.remaingStock }}</p>
       </b-table-column>
       <b-table-column
         width="150"
@@ -47,17 +47,23 @@ export default {
     },
     productName() {
       return this.$store.getters["product/GET_PRODUCT_NAME"];
-    },
-  },
+    }
+  }
 };
 </script>
 <style>
-tr.is-success {
-  background: #48c774;
-  color: rgb(255, 255, 255);
+tr.is-success .state {
+  background-color: rgb(98, 255, 98);
+  border-radius: 7px;
+  padding: 1px 5px;
+  font-size: 13px;
+  text-align: center;
 }
-tr.is-danger {
-  background: #f14668;
-  color: rgb(255, 255, 255);
+tr.is-danger .state {
+  background-color: rgb(252, 107, 107);
+  border-radius: 7px;
+  padding: 1px 5px;
+  font-size: 13px;
+  text-align: center;
 }
 </style>
