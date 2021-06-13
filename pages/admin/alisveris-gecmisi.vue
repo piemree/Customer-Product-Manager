@@ -7,10 +7,10 @@
       class="is-flex is-justify-content-space-evenly is-flex-wrap-wrap py-4"
     >
       <div style="min-width:5rem;" class="my-2">
-        <b>Yonetim:</b> <input ref="yonetim" type="checkbox" value="yonetim" />
+        <b>Admin:</b> <input ref="admin" type="checkbox" value="admin" />
       </div>
       <div style="min-width:5rem;" class="my-2">
-        <b>Dagıtım:</b> <input ref="dagitim" type="checkbox" value="dagitim" />
+        <b>Normal:</b> <input ref="normal" type="checkbox" value="normal" />
       </div>
     </div>
     <b-table
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     onChanged() {
-      this.checkeds = [this.$refs.yonetim, this.$refs.dagitim].filter(el => {
+      this.checkeds = [this.$refs.admin, this.$refs.normal].filter(el => {
         if (el.checked) return true;
       });
 
