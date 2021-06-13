@@ -87,8 +87,9 @@ export default {
       const todayShopping = history.filter(
         el => new Date(el.date).getDate() === today
       );
+      
       let allTotal = 0;
-      todayShopping.forEach(shopping => (allTotal += parseFloat(shopping.quantity)));
+      todayShopping.forEach(shopping => (shopping.seller=='dagitim' ? allTotal += parseFloat(shopping.quantity):false));
 
    
       return allTotal;

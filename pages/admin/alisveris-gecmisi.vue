@@ -32,7 +32,7 @@
       <b-table-column field="date" label="Tarih" sortable v-slot="props">
         {{ $convert(props.row.date) }}
       </b-table-column>
-      <b-table-column width="100" v-slot="props">
+      <b-table-column width="100" label="Satıcı" v-slot="props">
         <p
           @click="props.row.details.length > 0 ? showDetails(props.row.details) : false"
           class="seller has-text-weight-semibold"
