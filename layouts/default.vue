@@ -89,7 +89,7 @@ export default {
       );
       
       let allTotal = 0;
-      todayShopping.forEach(shopping => (shopping.seller=='dagitim' ? allTotal += parseFloat(shopping.quantity):false));
+      todayShopping.forEach(shopping => (shopping.seller=='dagitim'  && shopping.details.length === 0 ? allTotal += parseFloat(shopping.quantity):false));
 
    
       return allTotal;
