@@ -2,9 +2,7 @@
   <div>
     <b-navbar v-if="user">
       <template #brand>
-         <b-navbar-item tag="router-link" :to="{ path: '/' }"
-          >DM</b-navbar-item
-        >
+        <b-navbar-item tag="router-link" :to="{ path: '/' }">DM</b-navbar-item>
         <b-navbar-item v-if="admin">
           <b>Total:</b><span>{{ totalBalance }} TL</span>
         </b-navbar-item>
@@ -87,11 +85,15 @@ export default {
       const todayShopping = history.filter(
         el => new Date(el.date).getDate() === today
       );
-      
-      let allTotal = 0;
-      todayShopping.forEach(shopping => (allTotal += parseFloat(shopping.quantity)));
 
-   
+      let allTotal = 0;
+      todayShopping.forEach(shopping =>
+        (shopping.seller == "normal" || shopping.seller == "admin") &&
+        shopping.details.length === 0
+          ? (allTotal += parseFloat(shopping.quantity))
+          : false
+      );
+
       return allTotal;
     },
     user() {
