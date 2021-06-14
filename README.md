@@ -100,11 +100,11 @@ There is a all products list.You can manage products.
 
 Single product count logs
 
-![Products-logs](https://user-images.githubusercontent.com/75936754/117592965-38467980-b143-11eb-983f-b595b3f2d0d1.png)
+![Products-logs](https://user-images.githubusercontent.com/75936754/121882566-61958f00-cd19-11eb-8a56-9dc2e0d08b85.png)
 
 You can watch your shopping logs with date range
 
-![shopping-logs](https://user-images.githubusercontent.com/75936754/117593037-75127080-b143-11eb-8e70-1507f1320977.png)
+![shopping-logs](https://user-images.githubusercontent.com/75936754/121882410-2abf7900-cd19-11eb-91ba-f255c2ba7200.png)
 
 
 
