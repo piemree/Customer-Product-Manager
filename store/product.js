@@ -123,6 +123,8 @@ export const actions = {
     context.dispatch("productCountControl", products);
     const wrongProducts = context.getters.GET_ARE_COUNTS_WRONG;
 
+    const seller = context.rootGetters["auth2/GET_USER"].split("@")[0];
+
     if (wrongProducts.length > 0) {
       return new Promise(async (resolve, reject) =>
         reject({
@@ -134,43 +136,46 @@ export const actions = {
             .join("")}`
         })
       );
-    } 
-     
-      return new Promise(async (resolve, reject) => {
-       if(products.length<=0) return  reject({ msg: "BİRŞEYLER TERS GİTTİ" });
-        products.map(async el => {
-          console.log("entered else block")
-          let id = el.product.id;
-          let count = el.count;
-          let finalSotck;
-          let productRef = this.$fire.firestore.collection("products").doc(id);
-            console.log("here");
-          try {
-            let prod = await productRef.get();
+    }
 
-            finalSotck = prod.data().stock - count;
-
-            await productRef.update({
-              stock: finalSotck
-            });
-
-            let history = {
-              id: id,
-              updateCount: count,
-              remaingStock: finalSotck,
-              company: company,
-              type: "sold"
-            };
-
-            await context.dispatch("updateProductHistory", history);
-
-            resolve("ok");
-          } catch (error) {
-            reject({ msg: "BİRŞEYLER TERS GİTTİ" });
-          }
+    return new Promise(async (resolve, reject) => {
+      if (!seller)
+        reject({
+          msg: "Satıcı kimliği belirsiz.Sayfayı yenileyip tekrar deneyin"
         });
+      if (products.length <= 0) return reject({ msg: "BİRŞEYLER TERS GİTTİ" });
+      products.map(async el => {
+        
+        let id = el.product.id;
+        let count = el.count;
+        let finalSotck;
+        let productRef = this.$fire.firestore.collection("products").doc(id);
+ 
+        try {
+          let prod = await productRef.get();
+
+          finalSotck = prod.data().stock - count;
+
+          await productRef.update({
+            stock: finalSotck
+          });
+
+          let history = {
+            id: id,
+            updateCount: count,
+            remaingStock: finalSotck,
+            company: company,
+            type: "sold"
+          };
+
+          await context.dispatch("updateProductHistory", history);
+
+          resolve("ok");
+        } catch (error) {
+          reject({ msg: "BİRŞEYLER TERS GİTTİ" });
+        }
       });
-    
+    });
   },
   productCountControl({ commit, getters }, products) {
     commit("ARE_COUNTS_WRONG", []);
@@ -244,11 +249,9 @@ export const actions = {
           updateDate: Date.now()
         })
         .then(() => {
-          console.log("ok");
           resolve("ok");
         })
         .catch(err => {
-          console.log(err);
           reject("error");
         });
     });

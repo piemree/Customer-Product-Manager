@@ -43,9 +43,9 @@ export default {
 
   methods: {
     getByDate() {
-      this.$store.dispatch("customer/getShopingHistory", {
+      this.$store.dispatch("customer/getShopingHistoryWithRange", {
         start: this.start.getTime(),
-        end: this.end.getTime(),
+        end: this.end.getTime()+1000*60*60*24,
       });
     },
   },

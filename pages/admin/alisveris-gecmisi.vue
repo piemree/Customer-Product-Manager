@@ -103,7 +103,7 @@ export default {
     history() {
       return this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
     }
-  }
+  },
 };
 </script>
 

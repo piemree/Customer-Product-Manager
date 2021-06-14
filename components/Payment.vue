@@ -251,6 +251,7 @@ export default {
               payment_amount: this.payment_amount,
               balance: this.customer.current_balance,
               company_name: this.customer.company_name,
+
             });
             loadingComponent.close();
             this.$buefy.toast.open({
@@ -261,7 +262,7 @@ export default {
             loadingComponent.close();
             this.$buefy.dialog.alert({
               title: "HATA!!!",
-              message: "BİRŞEYLER TERS GİTTİ",
+              message: error.msg,
               type: "is-danger",
               hasIcon: false,
               icon: "exclamation",

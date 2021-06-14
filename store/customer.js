@@ -29,7 +29,7 @@ export const getters = {
     return state.customers;
   },
   GET_CUSTOMERS_HİSTORY(state) {
-    return state.history;
+    return [...state.history].reverse();
   },
   GET_CURRENT_CUSTOMER(state) {
     return state.customer;
@@ -94,11 +94,17 @@ export const actions = {
     let new_balance =
       parseInt(customer.balance) - parseInt(customer.payment_amount);
 
+    let seller = context.rootGetters["auth2/GET_USER"].split("@")[0];
+
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
     let currentDate = Date.now();
 
     return new Promise(async (resolve, reject) => {
+      if (!seller)
+        reject({
+          msg: "Satıcı kimliği belirsiz.Sayfayı yenileyip tekrar deneyin"
+        });
       try {
         await ref.update({
           current_balance: new_balance,
@@ -110,13 +116,14 @@ export const actions = {
           quantity: customer.payment_amount,
           details: [],
           company: customer.company_name,
-          date: currentDate
+          date: currentDate,
+          seller: seller
         };
 
         await context.dispatch("saveShopping", shopping);
         resolve("ok");
       } catch (error) {
-        reject("err");
+        reject({ msg: "BİRŞEYLER TERS GİTTİ" });
       }
     });
   },
@@ -128,6 +135,7 @@ export const actions = {
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
 
     let currentDate = Date.now();
+
     return new Promise(async (resolve, reject) => {
       try {
         await ref.update({
@@ -141,7 +149,8 @@ export const actions = {
           quantity: customer.sales_amount,
           details: customer.final_shopping,
           company: customer.company_name,
-          date: currentDate
+          date: currentDate,
+          seller: seller
         };
 
         await context.dispatch("saveShopping", shopping);
@@ -175,21 +184,22 @@ export const actions = {
     });
   },
 
-  async saveShopping({ rootState }, { quantity, details, company, date }) {
+  async saveShopping(ctx, { quantity, details, company, date, seller }) {
     let type = details.length > 0 ? "satış" : "tahsilat";
-    let seller = rootState.auth2.user.split("@")[0];
+
     return new Promise(async (resolve, reject) => {
       let ref = this.$fire.firestore.collection("history");
 
       try {
         await ref.add({
-          quantity,
-          details,
-          company,
-          date,
-          seller,
-          type
+          quantity: quantity,
+          details: details,
+          company: company,
+          date: date,
+          seller: seller,
+          type: type
         });
+       
         resolve("ok");
       } catch (error) {
         reject(error);
@@ -197,6 +207,23 @@ export const actions = {
     });
   },
   async getShopingHistory(context, { start, end }) {
+    context.commit("CLEAR_HİSTORY");
+
+    this.$fire.firestore
+      .collection("history")
+      .where("date", ">", start)
+      .onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            context.commit("SET_CUSTOMERS_HİSTORY", {
+              ...change.doc.data(),
+              id: change.doc.id
+            });
+          }
+        });
+      });
+  },
+  async getShopingHistoryWithRange(context, { start, end }) {
     context.commit("CLEAR_HİSTORY");
 
     this.$fire.firestore
