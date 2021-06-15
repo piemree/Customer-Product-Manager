@@ -289,18 +289,18 @@ export default {
           const loadingComponent = this.$buefy.loading.open();
 
           try {
-            await this.$store.dispatch("product/decreaseProduct", {
+             await this.$store.dispatch("product/decreaseProduct", {
               products: this.data,
               company: this.customer.company_name,
             }); 
-
-            await this.$store.dispatch("customer/sell", {
+ 
+             await this.$store.dispatch("customer/sell", {
               id: this.customer.id,
               sales_amount: this.sales_amount,
               balance: this.customer.current_balance,
               final_shopping: this.data,
               company_name: this.customer.company_name,
-            });
+            }); 
 
             loadingComponent.close();
             this.$buefy.toast.open({
@@ -310,7 +310,6 @@ export default {
             this.data = [];
             this.sales_amount = "";
           } catch (error) {
-            console.log(error.msg)
             loadingComponent.close();
             this.$buefy.dialog.alert({
                title: error.title || "HATA!!!",

@@ -123,7 +123,7 @@ export const actions = {
         await context.dispatch("saveShopping", shopping);
         resolve("ok");
       } catch (error) {
-        reject({ msg: "BİRŞEYLER TERS GİTTİ" });
+        reject({ msg: "Tahsilat sırasında hata olustu" });
       }
     });
   },
@@ -133,6 +133,8 @@ export const actions = {
       parseInt(customer.balance) + parseInt(customer.sales_amount);
 
     let ref = this.$fire.firestore.collection("customers").doc(customer.id);
+
+    let seller = context.rootGetters["auth2/GET_USER"].split("@")[0];
 
     let currentDate = Date.now();
 
@@ -154,9 +156,10 @@ export const actions = {
         };
 
         await context.dispatch("saveShopping", shopping);
+
         resolve("ok");
       } catch (error) {
-        reject(error);
+        reject({ msg: error.message });
       }
     });
   },
@@ -199,10 +202,10 @@ export const actions = {
           seller: seller,
           type: type
         });
-       
+
         resolve("ok");
       } catch (error) {
-        reject(error);
+        reject({ msg: "Alısveris geçmisi kaydedilirken hata olustu" });
       }
     });
   },
