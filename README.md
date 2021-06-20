@@ -81,30 +81,7 @@ admin
 ```
 
 
-All customers in this page
 
-![Main-Page](https://user-images.githubusercontent.com/75936754/117592656-1a2c4980-b142-11eb-944c-0e8d0c312109.png)
-
-If you want to shopping a spesific customer .you must use this page
-
-![Spesific-Customer](https://user-images.githubusercontent.com/75936754/117592732-67102000-b142-11eb-86d3-5b5955351414.png)
-
-Pdfs looks like this
-
-![pdfwiev](https://user-images.githubusercontent.com/75936754/117746579-5086c900-b215-11eb-90ba-d34daabb0d52.jpg)
-
-
-There is a all products list.You can manage products.
-
-![Products](https://user-images.githubusercontent.com/75936754/117592766-8a3acf80-b142-11eb-90cf-4e946829d7e9.png)
-
-Single product count logs
-
-![Products-logs](https://user-images.githubusercontent.com/75936754/121882566-61958f00-cd19-11eb-8a56-9dc2e0d08b85.png)
-
-You can watch your shopping logs with date range
-
-![shopping-logs](https://user-images.githubusercontent.com/75936754/121882410-2abf7900-cd19-11eb-91ba-f255c2ba7200.png)
 
 
 
