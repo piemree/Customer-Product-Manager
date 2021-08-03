@@ -27,14 +27,18 @@
         {{ props.row.company }}
       </b-table-column>
       <b-table-column field="quantity" label="Miktar" sortable v-slot="props">
-        {{ props.row.quantity }} TL
+        {{ props.row.quantity }} TL <b>{{ props.row.card ? "K" : "" }}</b>
       </b-table-column>
       <b-table-column field="date" label="Tarih" sortable v-slot="props">
         {{ $convert(props.row.date) }}
       </b-table-column>
       <b-table-column width="100" label="Satıcı" v-slot="props">
         <p
-          @click="props.row.details.length > 0 ? showDetails(props.row.details) : false"
+          @click="
+            props.row.details.length > 0
+              ? showDetails(props.row.details)
+              : false
+          "
           class="seller has-text-weight-semibold"
         >
           {{ props.row.seller ? props.row.seller.toUpperCase() : "-" }}
@@ -103,7 +107,7 @@ export default {
     history() {
       return this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
     }
-  },
+  }
 };
 </script>
 

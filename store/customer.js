@@ -117,7 +117,8 @@ export const actions = {
           details: [],
           company: customer.company_name,
           date: currentDate,
-          seller: seller
+          seller: seller,
+          card: customer.card
         };
 
         await context.dispatch("saveShopping", shopping);
@@ -152,7 +153,8 @@ export const actions = {
           details: customer.final_shopping,
           company: customer.company_name,
           date: currentDate,
-          seller: seller
+          seller: seller,
+          card:customer.card
         };
 
         await context.dispatch("saveShopping", shopping);
@@ -187,7 +189,7 @@ export const actions = {
     });
   },
 
-  async saveShopping(ctx, { quantity, details, company, date, seller }) {
+  async saveShopping(ctx, { quantity, details, company, date, seller, card }) {
     let type = details.length > 0 ? "satış" : "tahsilat";
 
     return new Promise(async (resolve, reject) => {
@@ -200,7 +202,8 @@ export const actions = {
           company: company,
           date: date,
           seller: seller,
-          type: type
+          type: type,
+          card: card
         });
 
         resolve("ok");

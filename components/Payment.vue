@@ -26,13 +26,18 @@
             </p>
           </div>
         </b-field>
+        <b-field>
+          <b-checkbox v-model="isCardUsed" type="is-success">
+            Kredi Kartı
+          </b-checkbox>
+        </b-field>
       </b-tab-item>
 
       <b-tab-item label="SATIŞ">
         <section class="mt-5 mb-5" style="">
           <b-field label="Ürün ">
-                <v-select
-            style="width:15rem"
+            <v-select
+              style="width:15rem"
               v-model="productToAdd.product"
               label="name"
               :options="products"
@@ -48,20 +53,15 @@
               style="max-width: 30rem; width: 14rem"
             >
             </b-numberinput>
-            
           </b-field>
           <b-field label="Fiyat">
-            <!-- <b-numberinput
-              type="number"
-              min="0"
-              v-model="productToAdd.price"
+            <b-numberinput
               :controls="false"
-              :validation-message="false"
-              style="max-width: 10rem"
-              
-            >
-            </b-numberinput> -->
-             <b-numberinput :controls="false"  min="0" step="0.01"  v-model="productToAdd.price" style="max-width: 30rem; width: 14rem"></b-numberinput>
+              min="0"
+              step="0.01"
+              v-model="productToAdd.price"
+              style="max-width: 30rem; width: 14rem"
+            ></b-numberinput>
             <b-button @click="add" type="is-success" label="Ekle" />
           </b-field>
         </section>
@@ -77,7 +77,7 @@
             />
           </b-field>
 
-           <b-table :data="data" field="" :mobile-cards="false">
+          <b-table :data="data" field="" :mobile-cards="false">
             <b-table-column field="product.name" label="Ürün" v-slot="props">
               {{ props.row.product.name }}
             </b-table-column>
@@ -94,7 +94,7 @@
               <b-button
                 style="height:1.5rem"
                 class="m-0 p-2"
-                @click="data.splice(props.row.index,1)"
+                @click="data.splice(props.row.index, 1)"
               >
                 <b-icon style="color:red;cursor:pointer" icon="close"></b-icon>
               </b-button>
@@ -137,11 +137,12 @@
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 export default {
-   components: {
+  components: {
     vSelect
   },
   data() {
     return {
+      isCardUsed: false,
       activeTab: 0,
       payment_amount: null,
       sales_amount: null,
@@ -154,16 +155,16 @@ export default {
         product: { id: "", name: "" },
         count: null,
         price: null,
-        total: null,
+        total: null
       },
-      data: [],
+      data: []
     };
   },
   props: {
     customer: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
     totPrice() {
@@ -174,12 +175,12 @@ export default {
     },
     products() {
       return this.$store.getters["product/GET_PRODUCTS"];
-    },
+    }
   },
   watch: {
     data() {
       let total = 0;
-      this.data.map((el) => (total += parseFloat(el.total)));
+      this.data.map(el => (total += parseFloat(el.total)));
       this.totalTablePrice = total;
 
       this.totalTablePrice === 0
@@ -209,7 +210,7 @@ export default {
       } else {
         this.salebtn = false;
       }
-    },
+    }
   },
   methods: {
     add() {
@@ -229,7 +230,7 @@ export default {
           product: { id: "", name: "" },
           count: null,
           price: null,
-          total: null,
+          total: null
         };
       }
     },
@@ -237,7 +238,9 @@ export default {
       this.$buefy.dialog.confirm({
         title: "Uyarı Mesajı",
         message: `
-                    ${this.payment_amount} TL Tutarındaki tahsilatı onaylıyor musun?
+                    ${this.payment_amount} TL Tutarındaki <b>${
+          this.isCardUsed ? "KREDİ KARTI" : "NAKİT"
+        }</b> tahsilatı onaylıyor musun?
                     `,
         cancelText: "İptal",
         confirmText: "Onaylıyorum",
@@ -251,12 +254,12 @@ export default {
               payment_amount: this.payment_amount,
               balance: this.customer.current_balance,
               company_name: this.customer.company_name,
-
+              card: this.isCardUsed
             });
             loadingComponent.close();
             this.$buefy.toast.open({
               message: "İşlem başarıyla tamamlandı",
-              type: "is-success",
+              type: "is-success"
             });
           } catch (error) {
             loadingComponent.close();
@@ -268,12 +271,12 @@ export default {
               icon: "exclamation",
               iconPack: "fa",
               ariaRole: "alertdialog",
-              ariaModal: true,
+              ariaModal: true
             });
           }
 
           this.payment_amount = "";
-        },
+        }
       });
     },
     sell() {
@@ -289,43 +292,43 @@ export default {
           const loadingComponent = this.$buefy.loading.open();
 
           try {
-             await this.$store.dispatch("product/decreaseProduct", {
+            await this.$store.dispatch("product/decreaseProduct", {
               products: this.data,
-              company: this.customer.company_name,
-            }); 
- 
-             await this.$store.dispatch("customer/sell", {
+              company: this.customer.company_name
+            });
+
+            await this.$store.dispatch("customer/sell", {
               id: this.customer.id,
               sales_amount: this.sales_amount,
               balance: this.customer.current_balance,
               final_shopping: this.data,
               company_name: this.customer.company_name,
-            }); 
+              card: this.isCardUsed
+            });
 
             loadingComponent.close();
             this.$buefy.toast.open({
               message: "İşlem başarıyla tamamlandı",
-              type: "is-success",
+              type: "is-success"
             });
             this.data = [];
             this.sales_amount = "";
           } catch (error) {
             loadingComponent.close();
             this.$buefy.dialog.alert({
-               title: error.title || "HATA!!!",
+              title: error.title || "HATA!!!",
               message: error.msg || "BİRŞEYLER TERS GİTTİ",
               type: "is-danger",
               hasIcon: false,
               icon: "exclamation",
               iconPack: "fa",
               ariaRole: "alertdialog",
-              ariaModal: true,
+              ariaModal: true
             });
           }
-       
-        },
+        }
       });
-    },
-  },
+    }
+  }
 };
 </script>

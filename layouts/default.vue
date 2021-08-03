@@ -2,14 +2,34 @@
   <div>
     <b-navbar v-if="user">
       <template #brand>
-         <b-navbar-item tag="router-link" :to="{ path: '/' }"
-          >DM</b-navbar-item
-        >
+        <!--   <b-navbar-item tag="router-link" :to="{ path: '/' }">DM</b-navbar-item> -->
         <b-navbar-item v-if="admin">
           <b>Total:</b><span>{{ totalBalance }} TL</span>
         </b-navbar-item>
         <b-navbar-item>
-          <b>Tahsilat:</b><span>{{ endOfDay }} TL</span>
+          <b-dropdown aria-role="list">
+            <template #trigger="{ active }">
+              <b-button
+               
+                :icon-right="active ? 'menu-up' : 'menu-down'"
+              >{{ cardCollected + cashCollected }} TL</b-button>
+            </template>
+
+            <b-dropdown-item aria-role="listitem">
+              <b>Nakit tahsilat:</b><span>{{ cashCollected }} TL</span>
+            </b-dropdown-item>
+            <b-dropdown-item aria-role="listitem">
+              <b>Kart tahsilat:</b><span>{{ cardCollected }} TL</span>
+            </b-dropdown-item>
+            <b-dropdown-item aria-role="listitem">
+              <b>Toplam tahsilat:</b
+              ><span>{{ cardCollected + cashCollected }} TL</span>
+            </b-dropdown-item>
+            <b-dropdown-item aria-role="listitem"
+              ><b>Satış miktarı:</b
+              ><span>{{ totalSellsAmount }} TL</span></b-dropdown-item
+            >
+          </b-dropdown>
         </b-navbar-item>
       </template>
       <template #start>
@@ -80,20 +100,66 @@ export default {
       var total = numeral(balance).format("0,0");
       return total;
     },
-    endOfDay() {
+    cashCollected() {
       const today = new Date().getDate();
       let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
 
       const todayShopping = history.filter(
         el => new Date(el.date).getDate() === today
       );
-    
-      let allTotal = 0;
-      todayShopping.forEach(shopping => (shopping.seller=='dagitim'  && shopping.details.length === 0 ? allTotal += parseFloat(shopping.quantity):false));
 
-   
+      let allTotal = 0;
+      todayShopping.forEach(shopping => {
+        if (
+          shopping.seller == "dagitim" &&
+          shopping.details.length === 0 &&
+          shopping.card === false
+        ) {
+          allTotal += parseFloat(shopping.quantity);
+        }
+      });
+
       return allTotal;
     },
+    cardCollected() {
+      const today = new Date().getDate();
+      let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
+
+      const todayShopping = history.filter(
+        el => new Date(el.date).getDate() === today
+      );
+
+      let allTotal = 0;
+      todayShopping.forEach(shopping => {
+        if (
+          shopping.seller == "dagitim" &&
+          shopping.details.length === 0 &&
+          shopping.card === true
+        ) {
+          allTotal += parseFloat(shopping.quantity);
+        }
+      });
+
+      return allTotal;
+    },
+    totalSellsAmount() {
+      const today = new Date().getDate();
+      let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
+
+      const todayShopping = history.filter(
+        el => new Date(el.date).getDate() === today
+      );
+
+      let allTotal = 0;
+      todayShopping.forEach(shopping => {
+        if (shopping.seller == "dagitim" && shopping.details.length > 0) {
+          allTotal += parseFloat(shopping.quantity);
+        }
+      });
+
+      return allTotal;
+    },
+
     user() {
       return this.$store.getters["auth2/GET_USER"];
     },
