@@ -19,7 +19,7 @@
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/firebase": "^7.5.0",
     "core-js": "^3.9.1",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "find-config": "^1.0.0",
     "firebase": "^8.4.2",
     "jspdf": "^2.3.1",
