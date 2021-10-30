@@ -30,7 +30,7 @@
     "nuxt": "^2.15.3",
     "nuxt-buefy": "^0.4.4",
     "pdfmake": "^0.1.71",
-    "vue-select": "^3.11.2"
+    "vue-select": "^3.13.2"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",
