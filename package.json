@@ -27,7 +27,7 @@
     "moment": "^2.29.1",
     "moment-with-locales-es6": "^1.0.1",
     "numeral": "^2.0.6",
-    "nuxt": "^2.15.3",
+    "nuxt": "^2.15.8",
     "nuxt-buefy": "^0.4.4",
     "pdfmake": "^0.1.71",
     "vue-select": "^3.11.2"
