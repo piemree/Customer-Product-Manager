@@ -84,7 +84,7 @@ export default {
     }
   },
 
-  component: {
+  components: {
     Payment,
     PdfButton,
   },
@@ -139,6 +139,7 @@ export default {
         confirmText: "OK",
       });
     },
+   
   },
 };
 </script>

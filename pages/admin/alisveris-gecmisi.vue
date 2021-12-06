@@ -41,7 +41,8 @@
           "
           class="seller has-text-weight-semibold"
         >
-          {{ props.row.seller ? props.row.seller.toUpperCase() : "-" }}
+          {{ props.row.seller ? props.row.seller.toUpperCase() : "-" }} -
+          <b>{{ props.row.type === "satış" ? "S" : "T" }}</b>
         </p>
       </b-table-column>
     </b-table>
