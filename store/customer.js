@@ -19,6 +19,14 @@ export const mutations = {
     let index = state.customers.findIndex(customer => customer.id === data.id);
     this._vm.$set(state.customers, index, data);
   },
+  DELETE_CUSTOMER(state, { id }) {
+    const customerIndex = state.customers.findIndex(customer => {
+      return customer.id === id;
+    });
+    if (customerIndex > -1) {
+      state.customers.splice(customerIndex, 1);
+    }
+  },
   CLEAR_HİSTORY(state) {
     state.history = [];
   }
@@ -61,6 +69,9 @@ export const actions = {
           });
         }
         if (change.type === "removed") {
+          context.commit("DELETE_CUSTOMER", {
+            id: change.doc.id
+          });
         }
       });
     });
@@ -89,6 +100,10 @@ export const actions = {
         .then(customerRef => resolve(customerRef))
         .catch(err => reject(err));
     });
+  },
+  async deleteCustomer(context, id) {
+    let customerRef = this.$fire.firestore.collection("customers");
+    return customerRef.doc(id).delete();
   },
   async getpaid(context, customer) {
     let new_balance =
@@ -154,7 +169,7 @@ export const actions = {
           company: customer.company_name,
           date: currentDate,
           seller: seller,
-          card:customer.card
+          card: customer.card
         };
 
         await context.dispatch("saveShopping", shopping);
