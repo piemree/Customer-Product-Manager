@@ -222,15 +222,6 @@ export default {
 
       if (isCurrentShopping < 0) isCurrentShopping *= -1;
 
-      console.log({
-        balance,
-        isCurrentShopping,
-        final_sales_amount: this.customer.final_sales_amount,
-        final_payment_amount: this.customer.final_payment_amount,
-        final_sales_date:this.customer.final_sales_date,
-        final_payment_date:this.customer.final_payment_date
-      });
-
       if (isCurrentShopping < 1000 * 60) {
         return balance - (this.customer.final_sales_amount - this.customer.final_payment_amount);
       }

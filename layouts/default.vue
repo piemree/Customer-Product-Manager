@@ -32,6 +32,7 @@
             >
           </b-dropdown>
         </b-navbar-item>
+        
       </template>
       <template #start>
         <b-navbar-item tag="router-link" :to="{ path: '/' }"
@@ -61,6 +62,12 @@
         >
           Tahsilat Takip
         </b-navbar-item>
+             <b-navbar-item tag="router-link" :to="{ path: '/admin/debt-list' }">
+          Borc Listesi
+        </b-navbar-item>
+             <b-navbar-item tag="router-link" :to="{ path: '/admin/new-debt' }">
+          Borclu Ekle
+        </b-navbar-item>
       </template>
 
       <template #end>
@@ -80,7 +87,7 @@
       @click="$router.go(-1)"
       >Geri</b-button
     >
-    <div class="container">
+    <div class="container pt-5">
       <nuxt />
     </div>
   </div>
@@ -93,6 +100,7 @@ export default {
 
   created() {
     let start = Date.now() - 48 * 60 * 60 * 1000;
+    this.$store.dispatch("debt/getAllDebtsRealTime");
     this.$store.dispatch("customer/getAllCustomersRealTime");
     this.$store.dispatch("customer/getShopingHistory", {
       start: start,
