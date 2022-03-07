@@ -1,4 +1,4 @@
-
+import Vue from "vue";
 export const state = () => ({
   debts: []
 });
@@ -10,7 +10,7 @@ export const mutations = {
   },
   UPDATE_DEBT(state, debt) {
     const index = state.debts.findIndex(deb => deb.id === debt.id);
-    state.debts[index] = { ...debt };
+    Vue.set(state.debts, index, debt);
   },
   REMOVE_DEBT(state, debtId) {
     state.debts = [...state.debts.filter(debt => debt.id !== debtId)];
