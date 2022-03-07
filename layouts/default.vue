@@ -5,7 +5,11 @@
         <b-navbar-item v-if="admin">
           <b>Total:</b><span>{{ totalBalance }} TL</span>
         </b-navbar-item>
-        <b-navbar-item v-if="admin" tag="router-link" :to="{ path: '/admin/tahsilat' }">
+        <b-navbar-item
+          v-if="admin"
+          tag="router-link"
+          :to="{ path: '/admin/tahsilat' }"
+        >
           <b>Tahsilat:</b><span>{{ totalCollected() }} TL</span>
         </b-navbar-item>
         <b-navbar-item>
@@ -32,7 +36,9 @@
             >
           </b-dropdown>
         </b-navbar-item>
-        
+        <b-navbar-item v-if="admin">
+          <b>Toplam Borc:</b><span>{{ totalDebt }} TL</span>
+        </b-navbar-item>
       </template>
       <template #start>
         <b-navbar-item tag="router-link" :to="{ path: '/' }"
@@ -62,10 +68,10 @@
         >
           Tahsilat Takip
         </b-navbar-item>
-             <b-navbar-item tag="router-link" :to="{ path: '/admin/debt-list' }">
+        <b-navbar-item tag="router-link" :to="{ path: '/admin/debt-list' }">
           Borc Listesi
         </b-navbar-item>
-             <b-navbar-item tag="router-link" :to="{ path: '/admin/new-debt' }">
+        <b-navbar-item tag="router-link" :to="{ path: '/admin/new-debt' }">
           Borclu Ekle
         </b-navbar-item>
       </template>
@@ -95,6 +101,7 @@
 
 <script>
 import numeral from "numeral";
+import { mapState } from "vuex";
 export default {
   name: "default",
 
@@ -110,6 +117,12 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      totalDebt: state =>
+        state.debt.debts
+          .map(item => item.current_balance)
+          .reduce((prev, curr) => prev + curr, 0)
+    }),
     todayShopping() {
       const today = new Date().getDate();
       let history = this.$store.getters["customer/GET_CUSTOMERS_HİSTORY"];
