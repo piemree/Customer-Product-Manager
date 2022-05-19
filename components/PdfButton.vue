@@ -79,7 +79,7 @@ export default {
           {
             text: [
               { text: "ADRES: ", bold: "true" },
-              `Çınarönü mahallesi 1.adil sokak no:13 YILDIRIM/BURSA`
+              `Çınarönü mh. 3.çelik sokak no 22/A yıldırım/bursa`
             ],
             style: "adres"
           },
