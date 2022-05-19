@@ -66,13 +66,20 @@ export default {
             style: "info"
           },
           {
-            text: `Ayşe DEMİR Türkiye İş Bankası `,
+            text: `DM KİMYA İTHALAT İHRACAT SANAYİ LİMİTED ŞİRKETİ`,
             style: "iban"
           },
           {
             text: [
-              { text: `İBAN:  `, bold: "true" },
-              `TR200006400000122060670122`
+              { text: `İş Bankası İban No:  `, bold: "true" },
+              `TR030006400000122280205290`
+            ],
+            style: "ibanno"
+          },
+           {
+            text: [
+              { text: `Yapı Kredi İban No:  `, bold: "true" },
+              `TR490006701000000098739590`
             ],
             style: "ibanno"
           },
