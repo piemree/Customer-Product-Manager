@@ -8,7 +8,6 @@
               placeholder="Ödeme miktarı"
               type="number"
               min="0"
-              :max="maxpayamount"
               icon="calculator"
               :validation-message="errormessage"
               v-model="payment_amount"
@@ -188,21 +187,17 @@ export default {
         : (this.sales_amount = this.totalTablePrice);
     },
     payment_amount() {
-      if (
-        this.payment_amount === (null || "") ||
-        parseInt(this.payment_amount) > parseInt(this.maxpayamount) ||
-        this.payment_amount <= 0
-      ) {
+      if (this.payment_amount === (null || "")) {
         this.paybtn = false;
       } else {
         this.paybtn = true;
       }
 
-      if (parseInt(this.payment_amount) > parseInt(this.maxpayamount)) {
-        this.errormessage = "Ödeme miktarı bakiyeden büyük olmaz";
-      } else {
-        this.errormessage = "Lütfen doğru formatta numara girin ";
-      }
+      // if (parseInt(this.payment_amount) > parseInt(this.maxpayamount)) {
+      //   this.errormessage = "Ödeme miktarı bakiyeden büyük olmaz";
+      // } else {
+      //   this.errormessage = "Lütfen doğru formatta numara girin ";
+      // }
     },
     sales_amount() {
       if (this.sales_amount !== (null || "")) {
