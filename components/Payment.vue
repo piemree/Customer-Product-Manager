@@ -93,7 +93,7 @@
               <b-button
                 style="height:1.5rem"
                 class="m-0 p-2"
-                @click="data.splice(props.row.index, 1)"
+                @click="deleteProductFromTable(props.index)"
               >
                 <b-icon style="color:red;cursor:pointer" icon="close"></b-icon>
               </b-button>
@@ -208,6 +208,9 @@ export default {
     }
   },
   methods: {
+    deleteProductFromTable(index) {
+      this.data.splice(index, 1);
+    },
     add() {
       this.productToAdd.total =
         parseInt(this.productToAdd.count) * parseFloat(this.productToAdd.price);
