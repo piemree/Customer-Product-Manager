@@ -24,7 +24,7 @@
     "firebase": "^8.4.2",
     "jspdf": "^2.3.1",
     "jspdf-autotable": "^3.5.14",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "moment-with-locales-es6": "^1.0.1",
     "numeral": "^2.0.6",
     "nuxt": "^2.15.3",
